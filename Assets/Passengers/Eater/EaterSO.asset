@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac19a542fdd4be84981f537001249848, type: 3}
+  m_Name: EaterSO
+  m_EditorClassIdentifier: 
+  speciesName: Eater
+  description: 'OnNewStation: Eat a random adjacent passenger and gain thier stats'
+  baseCoins: 4
+  baseStations: 3
+  prefab: {fileID: 8432666971866891856, guid: 7556d2d8954517041b1dccd322968b08, type: 3}
