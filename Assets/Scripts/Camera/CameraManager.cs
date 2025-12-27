@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using Unity.Cinemachine;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -19,6 +20,13 @@ public class CameraManager : MonoBehaviour
     [SerializeField] float scrollSpeed = 100;
     [SerializeField] GameObject baseCam;
     [SerializeField] Transform baseCamCentre;
+    [SerializeField] AnimationCurve scrollSmoothingCurve;
+    float prevScrollVal = 0;
+    float scrollTime = 0;
+    float stopTime = 0;
+    [SerializeField] float lerpDuration = 0.2f;
+    float recentScroll = 0;
+    float targetOffset = 0;
     Vector3 baseCamOffset = Vector3.zero;
     
     //Seat panner VARS
@@ -32,6 +40,7 @@ public class CameraManager : MonoBehaviour
     float edgeThreshold = 0.2f;
     float mapCamPanSpeed = 20;
 
+    float camSpeedMult = 1;
 
     /*
     priority guide:
@@ -43,7 +52,7 @@ public class CameraManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        CinemachineCore.GetBlendOverride += HandleBlendOverride;
     }
 
     // Update is called once per frame
@@ -58,8 +67,7 @@ public class CameraManager : MonoBehaviour
         switch (camState)
         {
             case CamState.train:
-                baseCamOffset = new Vector3(baseCamOffset.x, Mathf.Clamp(baseCamOffset.y - Input.mouseScrollDelta.y * Time.deltaTime * scrollSpeed, -20, 20), -10);
-                baseCam.transform.position = baseCamCentre.position + baseCamOffset;
+                UpdateTrainCam();
                 break;
 
             case CamState.seatPan:
@@ -73,6 +81,54 @@ public class CameraManager : MonoBehaviour
                 break;
         }
         
+    }
+
+    void UpdateTrainCam() // maybe should make it fixed update but probs not
+    {
+        float scrollVal = Input.mouseScrollDelta.y;
+        if(scrollVal > 0)
+        {
+            stopTime = 0;
+            if(prevScrollVal >= 0)
+            {
+                scrollTime += Time.deltaTime;
+            }
+            else
+            {
+                scrollTime = Time.deltaTime;
+                targetOffset = baseCamOffset.y;
+                prevScrollVal = scrollVal;
+            } 
+        }
+        else if (scrollVal < 0)
+        {
+            stopTime = 0;
+            if (prevScrollVal <= 0)
+            {
+                scrollTime += Time.deltaTime;
+            }
+            else
+            {
+                scrollTime = Time.deltaTime;
+                targetOffset = baseCamOffset.y;
+                prevScrollVal = scrollVal;
+            }
+        }
+        else
+        {
+            stopTime += Time.deltaTime;
+            if(stopTime >= 0.05f)
+            {
+                scrollTime = 0;
+                targetOffset = baseCamOffset.y;
+                prevScrollVal = scrollVal;
+            }
+        }
+
+        //Debug.Log(Input.mouseScrollDelta.y);
+        targetOffset = Mathf.Clamp(targetOffset - Input.mouseScrollDelta.y * Time.deltaTime * scrollSpeed, -20, 20);
+        baseCamOffset = new Vector3(baseCamOffset.x, Mathf.Lerp(baseCamOffset.y, targetOffset, Mathf.Clamp(scrollTime/lerpDuration, 0, 1)), -10);
+        baseCam.transform.position = baseCamCentre.position + baseCamOffset;
     }
 
     void UpdateMapCam()
@@ -104,12 +160,27 @@ public class CameraManager : MonoBehaviour
         mapCam.transform.position += camVelocity;
     }
 
-    public void PanTo(GameObject obj)
-    {
+    public void PanTo(GameObject obj, float speed)
+    { 
+        camSpeedMult = speed;
         ResetToDefault();
+        seatPannerCam.GetComponent<CinemachinePositionComposer>().Damping = Vector3.one * (1/speed);
         seatPannerCam.GetComponent<CinemachineCamera>().Priority = 2;
         seatPannerCam.GetComponent<CinemachineCamera>().Target.TrackingTarget = obj.transform;
         UpdateCamState(CamState.seatPan);
+    }
+
+    CinemachineBlendDefinition HandleBlendOverride(ICinemachineCamera fromVcam, ICinemachineCamera toVcam, CinemachineBlendDefinition defaultBlend, Object owner)
+    {
+        if (fromVcam.Name == baseCam.name && toVcam.Name == seatPannerCam.name)
+        {
+            Debug.Log("applied custom blend");
+            CinemachineBlendDefinition customBlend = defaultBlend;
+            customBlend.Time = 1 / camSpeedMult; //maybe switch to cut at certain speed threshhold
+            return customBlend;
+        }
+
+        return defaultBlend;
     }
 
     public void OpenShopCam()
@@ -131,6 +202,8 @@ public class CameraManager : MonoBehaviour
         seatPannerCam.GetComponent<CinemachineCamera>().Priority = 0;
         shopMenuCam.GetComponent<CinemachineCamera>().Priority = 0; 
         mapCam.GetComponent<CinemachineCamera>().Priority = 0;
+        seatPannerCam.GetComponent<CinemachinePositionComposer>().Damping = Vector3.one;
+
         UpdateCamState(CamState.train);
     }
 

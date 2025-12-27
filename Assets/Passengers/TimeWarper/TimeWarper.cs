@@ -6,7 +6,7 @@ public class TimeWarper : Passenger
     public override IEnumerator NextStationAction()
     {
         StartCoroutine(base.NextStationAction());
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(1f / gameManager.animationSimSpeed);
 
         Passenger p = trainManager.GetRandomPassenger();
         StartCoroutine(p.NextStationAction());

@@ -1,14 +1,23 @@
+using TMPro;
 using UnityEngine;
 
 public class ShopSlot : MonoBehaviour
 {
-    ShopManager shopManager;
+    public ShopManager shopManager;
     ShopItem curItem;
+
+    [SerializeField] TextMeshProUGUI nameText;
+    [SerializeField] TextMeshProUGUI costText;
+
+    public ShopItemInfoPanel infoPanel;
+
 
     void Awake()
     {
+        /*
         shopManager = FindFirstObjectByType<ShopManager>();
-        shopManager.shopSlots.Add(this);    
+        shopManager.shopSlots.Add(this);   
+        */
     }
 
     void Update()
@@ -36,6 +45,13 @@ public class ShopSlot : MonoBehaviour
         item.gameObject.transform.localPosition = Vector3.zero;
         item.gameObject.transform.localScale = Vector3.one;
 
+        UpdateText();
+    }
+
+    void UpdateText()
+    {
+        costText.text = shopManager.GetCost(curItem.templateSO).ToString();
+        nameText.text = curItem.templateSO.buildingName;
     }
 
 

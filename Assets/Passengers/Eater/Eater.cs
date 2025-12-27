@@ -9,7 +9,7 @@ public class Eater : Passenger
         StartCoroutine(base.NextStationAction());
 
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(1f/gameManager.animationSimSpeed);
             
         List<Seat> adj = trainManager.GetNeighboringSeats(seat);
         List<Passenger> adjP = new List<Passenger>();

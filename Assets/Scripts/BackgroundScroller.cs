@@ -1,8 +1,7 @@
 using UnityEngine;
 
-public class Shop : MonoBehaviour
+public class BackgroundScroller : MonoBehaviour
 {
-    [SerializeField] CameraManager cameraManager;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -13,10 +12,5 @@ public class Shop : MonoBehaviour
     void Update()
     {
         
-    }
-
-    private void OnMouseDown()
-    {
-        cameraManager.OpenShopCam();
     }
 }

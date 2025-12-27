@@ -12,12 +12,23 @@ public class DragObj : MonoBehaviour
 
     public Vector3 startPos;
     public Transform startParent;
+    public SnappingPoint prevParentSnap;
 
     public bool locked;
 
+    public GameObject visual;
+    public Vector3 defaultScale;
+    public Vector3 pickupScale;
+
+    public GameManager gameManager;
+
     public virtual void Awake()
     {
+       defaultScale = visual.transform.localScale;
+
+       pickupScale = defaultScale * 1.2f;
        dragManager = FindFirstObjectByType<DragManager>();
+       gameManager = FindFirstObjectByType<GameManager>();
     }
 
     // Update is called once per frame
@@ -26,41 +37,58 @@ public class DragObj : MonoBehaviour
         if (isDragging)
         {
             dragManager.selectedDragObject = gameObject;
-            transform.position = dragManager.getMousePos() + dragOffset;
+            transform.position = dragManager.GetMousePos() + dragOffset;
         }
     }
 
     private void OnMouseDown()
     {
+        if (gameManager.mouseOverUI)
+        {
+            return;
+        }
         if (locked)
         {
             return;
         }
 
-        startPos = transform.position;
+
+        startPos = transform.localPosition;
         startParent = transform.parent;
 
-        dragOffset = transform.position - dragManager.getMousePos(); 
-        isDragging = true;
-        SnappingPoint parentSnap = null;
-        //seat = null;
+        visual.transform.localScale = pickupScale;
 
+        dragOffset = transform.position - dragManager.GetMousePos(); 
+        isDragging = true;
+
+        transform.parent.TryGetComponent<SnappingPoint>(out prevParentSnap);
+        dragManager.HighlightPlacableSpots(prevParentSnap);
+        //seat = null;
+        /*
         if(transform.parent != null && transform.parent.TryGetComponent<SnappingPoint>(out parentSnap))
         {
             parentSnap.occupiedGO = null;
         }
+        */
         transform.parent = null;
     }
 
     private void OnMouseUp()
     {
+        if (gameManager.mouseOverUI)
+        {
+            return;
+        }
         if (!isDragging)
         {
             return;
         }
 
+        visual.transform.localScale = defaultScale;
         isDragging = false;
-        SnappingPoint snapPoint = dragManager.checkSnap();
+        SnappingPoint snapPoint = dragManager.CheckSnap();
+
+        dragManager.UnhighlightAll();
 
         if(snapPoint == null)
         {
@@ -72,18 +100,17 @@ public class DragObj : MonoBehaviour
         }
     }
 
-    void ReturnToStart()
+    public void ReturnToStart()
     {
-        transform.position = startPos;
         transform.parent = startParent;
+        transform.localPosition = startPos;
     }
 
     public virtual void HandleSnap(SnappingPoint snapPoint)
     {
         if (!canOverlap && snapPoint.occupiedGO != null && snapPoint.occupiedGO != gameObject)
         {
-            transform.position = startPos;
-            transform.parent = startParent;
+            ReturnToStart();
         }
         else
         {

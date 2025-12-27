@@ -8,6 +8,8 @@ public class SnappingPoint : MonoBehaviour
     public string snapTag;
     public StationPath stationManager;
 
+    bool indicating;
+    public GameObject availableIndicator;
 
 
     public virtual void Awake()
@@ -21,15 +23,28 @@ public class SnappingPoint : MonoBehaviour
 
 
     // Update is called once per frame
-    void Update()
+    public virtual void Update()
     {
-        
+        if (availableIndicator)
+        {
+            availableIndicator.SetActive(indicating);
+        }
 
     }
 
     public virtual void NewStation()
     {
 
+    }
+
+    public void ShowIndicator()
+    {
+        indicating = true;
+    }
+
+    public void StopIndicating()
+    {
+        indicating = false;
     }
 
     public virtual void OnDrawGizmos()

@@ -34,15 +34,15 @@ public class TriggerEffectHandler : MonoBehaviour
         }
     }
 
-    public IEnumerator TriggerOnBoard()
+    public IEnumerator TriggerOnBoard(Passenger p)
     {
         //Debug.Log("boardinggggg");
         for(int i = 0; i < onboardEffects.Count; i++)
         {
             Debug.Log(i);
-            if (onboardEffects[i].CheckTrigger())
+            if (onboardEffects[i].CheckTrigger(p))
             {
-                StartCoroutine(onboardEffects[i].Trigger());
+                StartCoroutine(onboardEffects[i].Trigger(p));
             }
         }
 

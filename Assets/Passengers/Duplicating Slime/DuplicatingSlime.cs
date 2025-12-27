@@ -12,7 +12,7 @@ public class DuplicatingSlime : Passenger
 
         if(Random.value > 0.5)
         {
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(1f / gameManager.animationSimSpeed);
 
             List<Seat> adj = trainManager.GetNeighboringSeats(seat);
 

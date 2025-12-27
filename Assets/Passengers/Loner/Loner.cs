@@ -9,12 +9,12 @@ public class Loner : Passenger
     {
         StartCoroutine(base.NextStationAction());
 
-        List<Seat> sameCarSeats = trainManager.GetSameCarSeats(seat);
-
+        List<Seat> adj = trainManager.GetNeighboringSeats(seat);
         bool empty = true;
-        for (int i = 0; i < sameCarSeats.Count; i++)
+
+        for (int i = 0; i < adj.Count; i++)
         {
-            if(sameCarSeats[i].GetPassenger() && sameCarSeats[i].GetPassenger() != this)
+            if(adj[i].GetPassenger() && adj[i].GetPassenger() != this)
             {
                 empty = false;
             }

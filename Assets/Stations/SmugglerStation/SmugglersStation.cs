@@ -33,14 +33,14 @@ public class SmugglersStation : Station
 
         for (int i = 0; i < numPassengers && emptySeats.Count > 0; ++i)
         {
-            Passenger curPassenger = passengerGenerator.GenerateCharacter();
+            Passenger curPassenger = passengerGenerator.GenerateCharacterFromPool();
             curPassenger.station = this;
 
             Seat randSeat = emptySeats[UnityEngine.Random.Range(0, emptySeats.Count)];
 
             curPassenger.transform.parent = randSeat.transform;
             curPassenger.transform.localPosition = Vector3.zero;
-            randSeat.occupiedGO = gameObject;
+            randSeat.occupiedGO = curPassenger.gameObject;
 
             curPassenger.UpdateCoins(curPassenger.info.coins);
 

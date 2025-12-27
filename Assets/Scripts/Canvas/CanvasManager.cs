@@ -27,6 +27,9 @@ public class CanvasManager : MonoBehaviour
 
     [SerializeField] GameObject defaultCanvas;
     [SerializeField] GameObject shopCanvas;
+    [SerializeField] GameObject contractCanvas;
+
+    [SerializeField] GameObject endOfDayPopup;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -98,20 +101,40 @@ public class CanvasManager : MonoBehaviour
             return;
         }
 
+        if (state == GameManager.GameState.ContractMenu)
+        {
+            DisableCanvas();
+            contractCanvas.SetActive(true);
+            return;
+        }
     }
-
-    
-
 
     public void DisableCanvas()
     {
         //disables all ui
         defaultCanvas.SetActive(false);
         shopCanvas.SetActive(false);
+        contractCanvas.SetActive(false);
     }
 
     public void StationChoiceComplete()
     {
         SetCanvasMode(GameManager.GameState.Default);
+    }
+
+    public void OpenEndOfDayOverviewPopup()
+    { 
+        endOfDayPopup.SetActive(true);
+    }
+
+    public void SetupEndOfDayData(int quota, int coinAmt)
+    {
+        endOfDayPopup.GetComponent<EndOfDayPopup>().Setup(quota, coinAmt);
+
+    }
+
+    public void CloseEndOfDayOverviewPopup()
+    {
+        endOfDayPopup.SetActive(false);
     }
 }

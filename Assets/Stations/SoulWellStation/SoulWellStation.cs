@@ -22,7 +22,7 @@ public class SoulWellStation : Station
     public override void OnPassengerDepart(Passenger passenger)
     {
         Debug.Log("spawn");
-        Passenger curPassenger = passengerGenerator.GenerateCharacter();
+        Passenger curPassenger = passengerGenerator.GenerateCharacterFromPool();
 
         AddPassenger(curPassenger);
 

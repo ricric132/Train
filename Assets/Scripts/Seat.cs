@@ -10,9 +10,9 @@ public class Seat : SnappingPoint
     }
 
     // Update is called once per frame
-    void Update()
+    public override void Update()
     {
-        
+        base.Update();
     }
 
     public IEnumerator NextStation() {

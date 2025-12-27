@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8963812847834806017}
   - component: {fileID: 5241788265775328852}
   m_Layer: 0
-  m_Name: SoulWellMapTile
+  m_Name: SoulWellStationMapTile
   m_TagString: Station
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

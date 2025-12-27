@@ -7,6 +7,8 @@ public class PlayerManager : MonoBehaviour
     int positive;
     int negative;
 
+    int upgradeMoney;
+
     CanvasManager canvasManager;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -36,6 +38,16 @@ public class PlayerManager : MonoBehaviour
     {
         negative += num;
         canvasManager.UpdateNegativeText(negative); 
+    }
+
+    public void UpdateMoney(int amount)
+    {
+        upgradeMoney += amount;
+    }
+
+    public int GetMoney()
+    {
+        return upgradeMoney;
     }
 }
 

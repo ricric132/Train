@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEditor;
 
 public class DragManager : MonoBehaviour
 {
@@ -19,7 +20,7 @@ public class DragManager : MonoBehaviour
         
     }
 
-    public SnappingPoint checkSnap()
+    public SnappingPoint CheckSnap()
     {
         float closestDist = Mathf.Infinity;
         SnappingPoint closestPoint = null;
@@ -43,7 +44,44 @@ public class DragManager : MonoBehaviour
         return closestPoint;
     }
 
-    public Vector3 getMousePos()
+    public void HighlightPlacableSpots(SnappingPoint startingPoint)
+    {
+        for(int i = 0;i < snappingpoints.Count; i++)
+        {
+            if (snappingpoints[i].gameObject.activeInHierarchy == false)
+            {
+                continue;
+            }
+
+            if (startingPoint.gameObject.tag == "QueueSpot")
+            {
+                if (snappingpoints[i].gameObject.tag == "Seat" && snappingpoints[i].occupiedGO == null)
+                {
+                    snappingpoints[i].ShowIndicator();
+                }
+            }
+
+            if (startingPoint.gameObject.tag == "Seat")
+            {
+                if (snappingpoints[i].gameObject.tag == "DepartPoint")
+                {
+                    snappingpoints[i].ShowIndicator();
+                }
+            }
+        }
+
+    }
+
+    public void UnhighlightAll()
+    {
+        for (int i = 0; i < snappingpoints.Count; i++)
+        {
+            snappingpoints[i].StopIndicating();
+        }
+    }
+
+
+    public Vector3 GetMousePos()
     {
         return new Vector2(Camera.main.ScreenToWorldPoint(Input.mousePosition).x, Camera.main.ScreenToWorldPoint(Input.mousePosition).y);
     }

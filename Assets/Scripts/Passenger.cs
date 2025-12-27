@@ -1,7 +1,5 @@
-using JetBrains.Annotations;
 using System;
 using System.Collections;
-using System.Threading;
 using TMPro;
 using UnityEngine;
 
@@ -22,6 +20,7 @@ public class Passenger : DragObj
 
     public SpawnEffectPopup effectPopup;
     public Transform effectsCanvas;
+    public GameObject destinationReachedIndicator;
 
     public TextMeshProUGUI coinText;
     public TextMeshProUGUI timeText;
@@ -37,12 +36,15 @@ public class Passenger : DragObj
         base.Awake();
         canOverlap = false;
         canvas = GameObject.Find("MainCanvas");
-        playerManager = FindFirstObjectByType<PlayerManager>();
+        playerManager = gameManager.playerManager; // should group all finds tgth
+        trainManager = gameManager.trainManager;
+        path = gameManager.stationPath;
+        passengerGenerator = gameManager.passengerGenerator;
+        triggerEffectHandler = gameManager.triggerEffectHandler;
+
+
         effectPopup = GetComponent<SpawnEffectPopup>();
-        trainManager = FindFirstObjectByType<TrainManager>();
-        path = FindFirstObjectByType<StationPath>();
-        passengerGenerator = FindFirstObjectByType<PassengerGenerator>();
-        triggerEffectHandler = FindFirstObjectByType<TriggerEffectHandler>();
+
     }
 
     // Update is called once per frame
@@ -50,17 +52,38 @@ public class Passenger : DragObj
     {
         base.Update();
 
+        if (seat != null && !trainManager.stopped)
+        {
+            locked = true;
+        }
+        else
+        {
+            locked = false;
+        }
+        
         coinText.text = info.coins.ToString();
         timeText.text = info.stopsRemaining.ToString();
 
+        /*
         if (activeInfoPanel != null)
         {
             activeInfoPanel.transform.position = Input.mousePosition;
         }
+        */
     }
 
     public virtual void OnMouseEnter()
     {
+        if (gameManager.mouseOverUI)
+        {
+            if (activeInfoPanel != null)
+            {
+                Destroy(activeInfoPanel);
+                activeInfoPanel = null;
+            }
+            return;
+        }
+       
         if (activeInfoPanel != null)
         {
             Destroy(activeInfoPanel);
@@ -90,7 +113,7 @@ public class Passenger : DragObj
     {
         yield return StartCoroutine(NextStationAction());
         UpdateStationsRemaining(-1);
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(1f/gameManager.animationSimSpeed);
 
        
         
@@ -124,7 +147,7 @@ public class Passenger : DragObj
 
     public virtual void DoSeatedEffect(Seat _seat)
     {
-        StartCoroutine(triggerEffectHandler.TriggerOnBoard());
+        StartCoroutine(triggerEffectHandler.TriggerOnBoard(this));
     }
 
     public void OnDepart()
@@ -147,7 +170,8 @@ public class Passenger : DragObj
 
     public void Remove()
     {
-        if(seat.occupiedGO == gameObject)
+        passengerGenerator.UpdateSpeciesTableRemaining(info.species, 1);
+        if (seat != null && seat.occupiedGO == gameObject)
         {
             seat.occupiedGO = null;
         }
@@ -164,7 +188,7 @@ public class Passenger : DragObj
 
     }
 
-    bool ReachedStation()
+    public bool ReachedStation()
     {
         return info.stopsRemaining == 0;
     }
@@ -177,31 +201,35 @@ public class Passenger : DragObj
             {
                 Debug.Log("departed");
                 seat.occupiedGO = null;
+                prevParentSnap.occupiedGO = null;
                 transform.parent = snapPoint.transform;
                 transform.localPosition = Vector3.zero;
                 OnDepart();
             }
             else
             {
-                transform.position = startPos;
-                transform.parent = startParent;
+                ReturnToStart();
             }
         }
         else if (!canOverlap && snapPoint.occupiedGO != null && snapPoint.occupiedGO != gameObject)
         {
-            transform.position = startPos;
-            transform.parent = startParent;
+            ReturnToStart();
         }
         else if (seat != null)
         {
-            transform.position = startPos;
-            transform.parent = startParent;
+            ReturnToStart();
         }
         else
         {
+
             transform.parent = snapPoint.transform;
             transform.localPosition = Vector3.zero;
+            if(prevParentSnap != null)
+            {
+                prevParentSnap.occupiedGO = null;
+            }
             snapPoint.occupiedGO = gameObject;
+
             if (snapPoint.tag == "Seat")
             {
                 OnSeated(snapPoint.gameObject.GetComponent<Seat>());
@@ -223,7 +251,7 @@ public class Passenger : DragObj
 
         if (ReachedStation())
         {
-            OnDepart();
+            destinationReachedIndicator.SetActive(true);
             return false;
         }
         return true;

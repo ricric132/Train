@@ -68,7 +68,7 @@ public class Station : MonoBehaviour
 
         for (int i = 0; i < numPassengers; ++i)
         {
-            Passenger curPassenger = passengerGenerator.GenerateCharacter();
+            Passenger curPassenger = passengerGenerator.GenerateCharacterFromPool();
             curPassenger.station = this;
             passengerList.Add(curPassenger);
         }
@@ -131,7 +131,9 @@ public class Station : MonoBehaviour
         {
             if (inQueue[i].seat == null)
             {
-                GameObject.Destroy(inQueue[i].gameObject);
+                
+                inQueue[i].Remove();
+                
             }
         }
     }

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class BuildableItem : ShopItem
 {
@@ -65,12 +66,13 @@ public class BuildableItem : ShopItem
         return true;
     }
 
-    public override void OnPointerUp()
+    public override void OnPointerUp(PointerEventData data)
     {
-        base.OnPointerUp();
+        base.OnPointerUp(data);
 
-        if (OnMap() && IsValidBuildSpot())
+        if (OnMap() && CheckBuild())
         {
+            slot.shopManager.Buy(this);
             Vector2 worldPos = cam.ScreenToWorldPoint(transform.position);
             Vector2Int coords = map.WorldPosToGridCoord(worldPos.x, worldPos.y);
             
@@ -83,6 +85,25 @@ public class BuildableItem : ShopItem
             itemVisual.SetActive(true);
         }
 
+    }
+
+    bool CheckBuild()
+    {
+        if (!IsValidBuildSpot())
+        {
+            slot.shopManager.InvalidActionPopup("Cannot build this building there");
+            //textPopup
+            return false;
+        }
+
+        if (!slot.shopManager.CheckAffordable(this))
+        {
+            slot.shopManager.InvalidActionPopup("Not enough money");
+            return false;
+        }
+
+
+        return true;
     }
 
     void Build(Vector2Int buildSpot)

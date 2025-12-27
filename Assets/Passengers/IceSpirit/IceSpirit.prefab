@@ -203,7 +203,11 @@ MonoBehaviour:
   seat: {fileID: 0}
   startPos: {x: 0, y: 0, z: 0}
   startParent: {fileID: 0}
+  prevParentSnap: {fileID: 0}
   locked: 0
+  visual: {fileID: 4213879633360242085}
+  defaultScale: {x: 0, y: 0, z: 0}
+  pickupScale: {x: 0, y: 0, z: 0}
   infoPanelPrefab: {fileID: 3164706386104871312, guid: 06dcd8afa6f852947a4f073b135b3db5, type: 3}
   activeInfoPanel: {fileID: 0}
   canvas: {fileID: 0}
@@ -212,11 +216,13 @@ MonoBehaviour:
   station: {fileID: 0}
   effectPopup: {fileID: 0}
   effectsCanvas: {fileID: 8379654338338021636}
+  destinationReachedIndicator: {fileID: 1662928145717959864}
   coinText: {fileID: 5067437820204311193}
   timeText: {fileID: 4092349744281844217}
   trainManager: {fileID: 0}
   path: {fileID: 0}
   passengerGenerator: {fileID: 0}
+  triggerEffectHandler: {fileID: 0}
   stillActive: 1
 --- !u!1001 &6840220927518428058
 PrefabInstance:
@@ -279,6 +285,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f5e518e27e4c1ad44b87e025dcdff340, type: 3}
+--- !u!1 &1662928145717959864 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5331893518483412770, guid: f5e518e27e4c1ad44b87e025dcdff340, type: 3}
+  m_PrefabInstance: {fileID: 6840220927518428058}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &4092349744281844217 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7361039961949844067, guid: f5e518e27e4c1ad44b87e025dcdff340, type: 3}

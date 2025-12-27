@@ -22,11 +22,11 @@ public class MapTrain : MonoBehaviour
 
     }
     
-    public void Move()
+    public void Move(float simSpeed)
     {
         Vector2 curPos = map.GridCoordToWorldPos(CurCoords().x, CurCoords().y, centred:true);
         Vector2 nextPos = map.GridCoordToWorldPos(NextCoords().x, NextCoords().y, centred:true);
-        moveProgress += Time.deltaTime * speed;
+        moveProgress += Time.deltaTime * speed * simSpeed;
         transform.position = Vector2.Lerp(curPos, nextPos, Mathf.Clamp(moveProgress, 0, 1));
         if(moveProgress >= 1)
         {

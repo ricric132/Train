@@ -14,13 +14,13 @@ public class Furnace : Building, IOnBoardEffect
         triggerEffectHandler.AddEffect(gameObject);
 
     }
-    public bool CheckTrigger()
+    public bool CheckTrigger(Passenger p)
     {
         //Debug.Log("checkk");
         return true;
     }
 
-    public IEnumerator Trigger()
+    public IEnumerator Trigger(Passenger p)
     {
         //Debug.Log("trigggerrrs");
         playerManager.AddPositive(addAmount);

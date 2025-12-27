@@ -36,7 +36,7 @@ public class BusStop : Building, IStationBuff
     }
     public void PostGenBuff(Station station)
     {
-        Passenger extraPassenger = station.passengerGenerator.GenerateCharacter();
+        Passenger extraPassenger = station.passengerGenerator.GenerateCharacterFromPool();
         station.AddPassenger(extraPassenger);
     }
     public void MidGenBuff(Station station)

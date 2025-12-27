@@ -2,7 +2,7 @@ using System.Collections;
 
 public interface IOnBoardEffect
 {
-    public bool CheckTrigger();
+    public bool CheckTrigger(Passenger p);
 
-    public IEnumerator Trigger();
+    public IEnumerator Trigger(Passenger p);
 }

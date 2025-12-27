@@ -1,14 +1,9 @@
 using System;
-using UnityEngine;
-using System.Linq;
 using System.Collections.Generic;
-
-public enum Species
-{
-    imp,
-    fireSpirit,
-    frostSpirit
-}
+using System.Linq;
+using System.Threading;
+using UnityEngine;
+using UnityEngine.InputSystem;
 
 public enum Names
 {
@@ -23,19 +18,67 @@ public class PassengerGenerator : MonoBehaviour
     [SerializeField] GameObject passengerPrefab;
     [SerializeField] Transform spawnPoint;
 
+    public List<SpeciesSO> fodderSpecies;
     public List<SpeciesSO> availableSpecies;
 
-    public Passenger GenerateCharacter()
-    {
+    List<SpeciesStats> speciesTable = new List<SpeciesStats>();
 
+    [SerializeField] PassengerList passengerList;
+
+    private void Start()
+    {
+        UpdateSpeciesTableTotal(availableSpecies[UnityEngine.Random.Range(0, availableSpecies.Count)], 5);
+        UpdateSpeciesTableTotal(availableSpecies[UnityEngine.Random.Range(0, availableSpecies.Count)], 5);
+        UpdateSpeciesTableTotal(availableSpecies[UnityEngine.Random.Range(0, availableSpecies.Count)], 5);
+        UpdateSpeciesTableTotal(availableSpecies[UnityEngine.Random.Range(0, availableSpecies.Count)], 5);
+        UpdateSpeciesTableTotal(availableSpecies[UnityEngine.Random.Range(0, availableSpecies.Count)], 5);
+
+    }
+
+    public Passenger GenerateCharacterFromPool()
+    {
         string name = ((Names)UnityEngine.Random.Range(0, (int)Enum.GetValues(typeof(Names)).Cast<Names>().Max())).ToString();
-        SpeciesSO species = availableSpecies[UnityEngine.Random.Range(0, availableSpecies.Count)];
+
+        //SpeciesSO species = availableSpecies[UnityEngine.Random.Range(0, availableSpecies.Count)];
+        SpeciesSO species = null;
+        int sum = 0;
+        for(int i = 0; i < speciesTable.Count; i++)
+        {
+            sum += speciesTable[i].amountRemaining;
+        }
+
+        if (sum == 0)
+        {
+            species = fodderSpecies[UnityEngine.Random.Range(0, fodderSpecies.Count)];
+        }
+        else
+        {
+            int rand = UnityEngine.Random.Range(0, sum);
+            int counter = 0;
+            for (int i = 0; i < speciesTable.Count; i++)
+            {
+                counter += speciesTable[i].amountRemaining;
+                species = speciesTable[i].species;
+
+                if (rand <= counter)
+                {
+                    break;
+                }
+            }
+        }
+
+
+        if (species == null)
+        {
+            Debug.Log("failed to generate passenger");
+            return null;
+        }
 
         PassengerInfo info = new PassengerInfo(name, species);
-
         Passenger cur = Instantiate(species.prefab, spawnPoint).GetComponent<Passenger>();
-
         cur.SetUp(info);
+
+        UpdateSpeciesTableRemaining(species, -1);
 
         return cur;
     }
@@ -53,6 +96,66 @@ public class PassengerGenerator : MonoBehaviour
         return cur;
     }
 
+    public void UpdateSpeciesTableTotal(SpeciesSO species, int amt)
+    {
+        /*
+        if (speciesDict.ContainsKey(species))
+        {
+            speciesDict[species] += amt;
+            speciesSpawnable[species] += amt;
+        }
+        else
+        {
+            Debug.Log(species.speciesName + " added");
+            speciesDict[species] = amt;
+            speciesSpawnable[species] = amt;  
+        }
+        */
+
+        SpeciesStats speciesStats = speciesTable.Find(x => x.species == species);
+        if (speciesStats != null)
+        {
+            speciesStats.totalAmount += amt;
+            UpdateSpeciesTableRemaining(species, amt);
+        }
+        else
+        {
+            speciesStats = new SpeciesStats(species, amt);
+            speciesTable.Add(speciesStats);
+        }
+
+        passengerList.Setup(speciesTable);
+    }
+
+    public void UpdateSpeciesTableRemaining(SpeciesSO species, int amt)
+    {
+        SpeciesStats speciesStats = speciesTable.Find(x => x.species == species);
+        if (speciesStats != null)
+        {
+            speciesStats.amountRemaining += amt;
+        }
+        else
+        {
+            Debug.Log("species not found in passenger list");
+        }
+
+        passengerList.Setup(speciesTable);
+    }
+}
+
+public class SpeciesStats
+{
+    public SpeciesSO species;
+    public int amountRemaining = 0;
+    public int totalAmount = 0;
+    public float rarityBias = 1; //possible thought
+
+    public SpeciesStats(SpeciesSO _species , int _totalAmount)
+    {
+        species = _species;
+        amountRemaining = _totalAmount;
+        totalAmount = _totalAmount;
+    }
 }
 
 public class PassengerInfo

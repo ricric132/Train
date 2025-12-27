@@ -13,8 +13,7 @@ MonoBehaviour:
   m_Name: DuplicatingSlimeSO
   m_EditorClassIdentifier: 
   speciesName: Slime
-  description: "OnNewStation: If an adjacent seat is empty, \n50% chance to create
-    a clone of this passeger "
+  description: 'OnNewStation: 50% chance to clone when adjacent to an empty seat'
   baseCoins: 3
   baseStations: 6
   prefab: {fileID: 8432666971866891856, guid: 2556a5358e310e843ae6ef7cdaf3fd09, type: 3}

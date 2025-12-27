@@ -35,7 +35,7 @@ public class TrainManager : MonoBehaviour
     {
         if (!stopped)
         {
-            trainIcon.Move();
+            trainIcon.Move(gameManager.trainMoveSimSpeed);
             Station curStation = trainIcon.CheckStation();
             if (curStation != null && curStation != prevStation) 
             {
@@ -53,7 +53,7 @@ public class TrainManager : MonoBehaviour
         Debug.Log("GOOO");
         while (Mathf.Abs(trainFront.position.y - rightStop.position.y) > 0.1 && trainFront.position.y < rightStop.position.y)
         {
-            trainFront.position = new Vector3(trainFront.position.x, driveSpeed * Time.deltaTime + trainFront.position.y, trainFront.position.z);
+            trainFront.position = new Vector3(trainFront.position.x, driveSpeed * Time.deltaTime * gameManager.animationSimSpeed + trainFront.position.y, trainFront.position.z);
             yield return new WaitForEndOfFrame();
         }
         stopped = false;
@@ -66,7 +66,7 @@ public class TrainManager : MonoBehaviour
 
         while (Mathf.Abs(trainFront.position.y - stationStop.position.y) > 0.1 && trainFront.position.y < stationStop.position.y)
         {
-            trainFront.position = new Vector3(trainFront.position.x, driveSpeed * Time.deltaTime + trainFront.position.y, trainFront.position.z);
+            trainFront.position = new Vector3(trainFront.position.x, driveSpeed * Time.deltaTime * gameManager.animationSimSpeed + trainFront.position.y, trainFront.position.z);
             yield return new WaitForEndOfFrame();
         }
 
@@ -80,6 +80,7 @@ public class TrainManager : MonoBehaviour
         {
             if (seats[i].occupiedGO != null)
             {
+                
                 toSim.Add(seats[i].GetPassenger());
 
             }
@@ -89,10 +90,11 @@ public class TrainManager : MonoBehaviour
         {
             if (toSim[i] == null)
             {
+                Debug.Log("null at - " + i);
                 continue;
             }
-            cameraManager.PanTo(toSim[i].gameObject);
-            yield return new WaitForSeconds(0.5f);
+            cameraManager.PanTo(toSim[i].gameObject, gameManager.animationSimSpeed);
+            yield return new WaitForSeconds(0.5f/gameManager.animationSimSpeed);
             yield return StartCoroutine(curStation.EffectOnPassenger(toSim[i]));
             yield return StartCoroutine(toSim[i].NextStation());
         }
@@ -100,6 +102,19 @@ public class TrainManager : MonoBehaviour
         cameraManager.ResetToDefault();
 
         yield return new WaitForSeconds(1);
+    }
+
+    public bool HasDisembarkable()
+    {
+        for (int i = 0; i < seats.Count; i++)
+        {
+            Passenger p = seats[i].GetPassenger();
+            if (p && p.ReachedStation())
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     public IEnumerator DoEffectOnAllPassengers(Action<Passenger> effect)

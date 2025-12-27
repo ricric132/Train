@@ -2,10 +2,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class ShopItem : MonoBehaviour
+public class ShopItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
 {
-
-
     Rotation rotation;
     bool isDragging;
     Vector3 dragOffset;
@@ -36,6 +34,7 @@ public class ShopItem : MonoBehaviour
     {
         if (isDragging)
         {
+            slot.infoPanel.Close();
             if (OnMap())
             {
                 transform.position = cam.WorldToScreenPoint(SnapToGrid(cam.ScreenToWorldPoint(Input.mousePosition)));
@@ -56,13 +55,13 @@ public class ShopItem : MonoBehaviour
         return Input.mousePosition.x < Screen.width * 0.5625f;
     }
     
-    public void OnPointerDown()
+    public void OnPointerDown(PointerEventData data)
     {
         isDragging = true;
         dragOffset = transform.position - Input.mousePosition;
     }
 
-    public virtual void OnPointerUp()
+    public virtual void OnPointerUp(PointerEventData data)
     {
         if (!isDragging)
         {
@@ -87,5 +86,16 @@ public class ShopItem : MonoBehaviour
     {
         Vector2Int coords = map.WorldPosToGridCoord(pos.x, pos.y);
         return map.GridCoordToWorldPos(coords.x, coords.y, true);
+    }
+
+    public void OnPointerEnter(PointerEventData data)
+    {
+        slot.infoPanel.Open();
+        slot.infoPanel.SetUp(templateSO);
+    }
+
+    public void OnPointerExit(PointerEventData data)
+    {
+        slot.infoPanel.Close();
     }
 }

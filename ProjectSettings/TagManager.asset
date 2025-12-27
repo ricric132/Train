@@ -47,6 +47,9 @@ TagManager:
   - name: Background
     uniqueID: 227902977
     locked: 0
+  - name: TrainCar
+    uniqueID: 2181496783
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0

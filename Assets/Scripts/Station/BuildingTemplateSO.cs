@@ -29,3 +29,15 @@ public class BuildingTemplateSO : ScriptableObject
         return null;
     }
 }
+
+public enum ItemType
+{
+    Station,
+    Building,
+}
+
+public enum Rarity
+{
+    Common,
+    Rare,
+}

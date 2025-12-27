@@ -2,8 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using Unity.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 public class GameManager : MonoBehaviour
@@ -13,19 +15,39 @@ public class GameManager : MonoBehaviour
         Default,
         PlayingAnimation,
         EscapeMenu,
-        ShopMenu
+        ShopMenu,
+        ContractMenu
     }
 
-    [SerializeField] CanvasManager canvasManager;
-    [SerializeField] TrainManager trainManager;
-    [SerializeField] StationPath stationPath;
+    public CanvasManager canvasManager;
+    public TrainManager trainManager;
+    public StationPath stationPath;
 
-    [SerializeField] StationSelection stationSelection;
-    [SerializeField] PlayerManager playerManager;
+    public StationSelection stationSelection;
+    public PlayerManager playerManager;
 
-    [SerializeField] ShopManager shopManager;
+    public ShopManager shopManager;
+    public ContractManager contractManager;
+    public PassengerGenerator passengerGenerator;
+
+    public TriggerEffectHandler triggerEffectHandler;
+
+
+    int upgradeCurrencyGain;
+    int baseUpgradeCurrencyGain = 10;
+    public int GetBaseCurrencyGain()
+    {
+        return baseUpgradeCurrencyGain;
+    }
+    public float currencyGainMult = 1;
 
     int quotaAmount;
+    int baseQuota;
+    public int GetBaseQuota()
+    {
+        return baseQuota;
+    }
+    public float quotaMult = 1;
     int startingQuota = 5;
 
     InputAction map;
@@ -42,6 +64,12 @@ public class GameManager : MonoBehaviour
     public float clockTimer = 0.0f;
     [SerializeField] float clockSpeed = 10;
 
+    public bool mouseOverUI;
+
+    public float trainMoveSimSpeed = 1;
+    public float animationSimSpeed = 1;
+
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -50,14 +78,20 @@ public class GameManager : MonoBehaviour
         trainManager = FindFirstObjectByType<TrainManager>();
         playerManager = FindFirstObjectByType<PlayerManager>();
         shopManager = FindFirstObjectByType<ShopManager>();
+        contractManager = FindFirstObjectByType<ContractManager>();
+        passengerGenerator = FindFirstObjectByType<PassengerGenerator>();
+        triggerEffectHandler = FindFirstObjectByType<TriggerEffectHandler>();
 
 
         dayClock = new ClockTime(6*60, 24*60);
         state = GameState.Default;
         prevState = GameState.Default;
+        upgradeCurrencyGain = baseUpgradeCurrencyGain;
 
         map = InputSystem.actions.FindAction("Map");
         map.Enable();
+
+        baseQuota = startingQuota;
         
     }
 
@@ -71,6 +105,8 @@ public class GameManager : MonoBehaviour
 
     void HandleInputs()
     {
+        mouseOverUI = EventSystem.current.IsPointerOverGameObject();
+
         if (map.WasPressedThisFrame())
         {
             ToggleShop();
@@ -84,7 +120,7 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        clockTimer += Time.deltaTime * clockSpeed;
+        clockTimer += Time.deltaTime * clockSpeed * trainMoveSimSpeed;
         clockText.text = dayClock.GetString(clockTimer);
 
         if (dayClock.CheckDayEnd(clockTimer))
@@ -94,7 +130,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void ToggleShop()
+    public void ToggleShop()
     {
         if(state != GameState.ShopMenu)
         {
@@ -107,6 +143,25 @@ public class GameManager : MonoBehaviour
         }
 
         canvasManager.SetCanvasMode(state);
+    }
+    public void ToggleContractMenu()
+    {
+        if (state != GameState.ContractMenu)
+        {
+            prevState = state;
+            state = GameState.ContractMenu;
+        }
+        else
+        {
+            state = prevState;
+        }
+
+        canvasManager.SetCanvasMode(state);
+    }
+
+    public void SetupContractMenu()
+    {
+        contractManager.Setup();
     }
 
     void GenerateStationChoices()
@@ -155,47 +210,12 @@ public class GameManager : MonoBehaviour
 
     public void NextStation()
     {
+        //check for no passengers ready to disembark 
         //StartCoroutine(GoToNextStation());
         if (trainManager.stopped)
         {
             StartCoroutine(LeaveStation());
         }
-    }
-
-    public IEnumerator GoToNextStation()
-    {
-        prevState = state;
-        state = GameState.PlayingAnimation;
-
-
-        yield return StartCoroutine(trainManager.SimulateLeaveStation());
-
-        stationPath.RemovePrevStation();
-        bool nextStationFound = stationPath.NextStation();
-        if (nextStationFound)
-        {
-            stationPath.GenerateStation();
-        }
-        else
-        {
-            stationPath.GenerateUpgradeStation();
-        }
-
-        yield return StartCoroutine(trainManager.SimulateEnterStation());
-
-        if (!nextStationFound)
-        {
-            LoopComplete();
-        }
-        else
-        {
-            Station curStation  = stationPath.GetCurStation();
-            yield return StartCoroutine(curStation.StationEnter());
-            yield return StartCoroutine(trainManager.SimulatePassengerEffects(curStation));
-        }
-
-        prevState = state;
-        state = GameState.Default;
     }
 
     public IEnumerator EnterStation(Station station)
@@ -208,8 +228,9 @@ public class GameManager : MonoBehaviour
         yield return StartCoroutine(trainManager.SimulateEnterStation());
 
         Station curStation = station;
-        yield return StartCoroutine(curStation.StationEnter());
         yield return StartCoroutine(trainManager.SimulatePassengerEffects(curStation));
+        yield return StartCoroutine(curStation.StationEnter());
+
 
         prevState = state;
         state = GameState.Default;
@@ -222,40 +243,48 @@ public class GameManager : MonoBehaviour
         state = GameState.PlayingAnimation;
 
         trainManager.stopped = true;
+        LoopComplete();
+
         stationPath.GenerateUpgradeStation();
         yield return StartCoroutine(trainManager.SimulateEnterStation());
+
+        canvasManager.OpenEndOfDayOverviewPopup();
+        canvasManager.SetupEndOfDayData(quotaAmount, playerManager.GetPositive());
+        playerManager.UpdateMoney(upgradeCurrencyGain);
+
 
         prevState = state;
         state = GameState.Default;
 
-        LoopComplete();
-
     }
+
+    public IEnumerator Sacrifice()
+    {
+
+        yield return null;
+    }
+
 
     public void LoopComplete()
     {
-        stationSelection.RandomizeStationSelect();
-        GenerateStationChoices();
-
-        ToggleShop(); // change later
+        //stationSelection.RandomizeStationSelect();
+        //GenerateStationChoices();
+        Debug.Log("complete");
         shopManager.SetUp();
-        QuotaIncreaseFunction();
 
-        /*
-        if (QuotaReached())
-        {
+        //ToggleShop(); // change later
+    }
 
-        }
-        else
-        {
-
-        }
-        */
+    public void NextDay()
+    {
+        StartCoroutine(StartNextDay());
     }
 
     public IEnumerator StartNextDay()
     {
-        ToggleShop();
+        ToggleContractMenu();
+        QuotaIncreaseFunction();
+
         clockTimer = 0.0f;
         yield return LeaveStation();
         trainManager.stopped = false;
@@ -274,23 +303,44 @@ public class GameManager : MonoBehaviour
         state = GameState.Default;
     }
 
-
-
     void QuotaIncreaseFunction()
     {
-        if(quotaAmount == 0)
+        if(baseQuota == 0)
         {
-            quotaAmount = startingQuota;
+            baseQuota = startingQuota;
         }
         else
         {
-            quotaAmount += (int)Mathf.Log(quotaAmount);
+            baseQuota = GetNextBaseQuota();
         }
+
+        quotaAmount = (int)(baseQuota * quotaMult);
         canvasManager.UpdateQuotaText(quotaAmount);
+    }
+
+    public int GetNextBaseQuota()
+    {
+        return baseQuota + (int)Mathf.Log(baseQuota);
+    }
+
+    public void UpdateQuotaMult(float amount)
+    {
+        quotaMult += amount;
+        quotaAmount = (int)(baseQuota * quotaMult); 
+        canvasManager.UpdateQuotaText(quotaAmount);
+    }
+
+    public void UpdateCurrencyMult(float amount)
+    {
+        currencyGainMult += amount;
+        upgradeCurrencyGain = (int)(baseUpgradeCurrencyGain * currencyGainMult);
     }
 
     bool QuotaReached()
     {
         return quotaAmount < playerManager.GetPositive();
     }
+
+
+
 }

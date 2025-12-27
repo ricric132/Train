@@ -38,25 +38,6 @@ public class StationPath : MonoBehaviour
         //GoToStation(0);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-       
-    }
-
-    /*
-    public void GenerateRandomPath()
-    {
-        path.Clear();
-        int length = UnityEngine.Random.Range(5, 10);
-
-        for (int i = 0; i < length; i++)
-        {
-            path.Add((Station.Types)UnityEngine.Random.Range(0, (int)Enum.GetValues(typeof(Station.Types)).Cast<Station.Types>().Max()));
-        }
-    }
-    */
-
     public void GenerateRandomStartingPath()
     {
         path.Clear();
@@ -76,61 +57,27 @@ public class StationPath : MonoBehaviour
     {
         if(curStation != null)
         {
+            curStation.RemovePassengers();
             curStation.gameObject.SetActive(false);
         }
 
         upgradeStation.SetActive(false);
     }
 
-    public bool NextStation()
-    {
-        stationNumber++;
-        if(stationNumber >= path.Count)
-        {
-            stationNumber = -1;
-            //gameManager.LoopComplete();
-            return false;
-            //GenerateRandomPath();
-        }
-
-
-        canvasManager.SetupStationsPreview(path, stationNumber);
-
-        return true;
-    }
-
-    public void GoToStation(int num)
-    {
-        stationNumber = num;
-        canvasManager.SetupStationsPreview(path, stationNumber);
-        GenerateStation();
-    }
-
+   
     public void GenerateUpgradeStation()
     {
         upgradeStation.SetActive(true);
     }
 
-    
-
-    public void GenerateStation()
-    {
-        if (curStation != null)
-        {
-            curStation.RemovePassengers();
-        }
-
-        curStation = path[stationNumber];
-        curStation.gameObject.SetActive(true);
-        curStation.GeneratePassengers();
-    }
-
     public void GenerateStation(Station station)
     {
+        /*
         if (curStation != null)
         {
             curStation.RemovePassengers();
         }
+        */
 
         curStation = station;
         curStation.gameObject.SetActive(true);
@@ -150,6 +97,92 @@ public class StationPath : MonoBehaviour
     {
         return curStation;
     }
+
+    /* ARCHIVED from old system
+    public IEnumerator GoToNextStation()
+    {
+        prevState = state;
+        state = GameState.PlayingAnimation;
+
+
+        yield return StartCoroutine(trainManager.SimulateLeaveStation());
+
+        stationPath.RemovePrevStation();
+        bool nextStationFound = stationPath.NextStation();
+        if (nextStationFound)
+        {
+            stationPath.GenerateStation();
+        }
+        else
+        {
+            stationPath.GenerateUpgradeStation();
+        }
+
+        yield return StartCoroutine(trainManager.SimulateEnterStation());
+
+        if (!nextStationFound)
+        {
+            LoopComplete();
+        }
+        else
+        {
+            Station curStation  = stationPath.GetCurStation();
+            yield return StartCoroutine(curStation.StationEnter());
+            yield return StartCoroutine(trainManager.SimulatePassengerEffects(curStation));
+        }
+
+        prevState = state;
+        state = GameState.Default;
+    }
+    
+    
+    public void GoToStation(int num)
+    {
+        stationNumber = num;
+        canvasManager.SetupStationsPreview(path, stationNumber);
+        GenerateStation();
+    }
+
+    public void GenerateStation()
+    {
+        if (curStation != null)
+        {
+            curStation.RemovePassengers();
+        }
+
+        curStation = path[stationNumber];
+        curStation.gameObject.SetActive(true);
+        curStation.GeneratePassengers();
+    }
+
+    public void GenerateRandomPath()
+    {
+        path.Clear();
+        int length = UnityEngine.Random.Range(5, 10);
+
+        for (int i = 0; i < length; i++)
+        {
+            path.Add((Station.Types)UnityEngine.Random.Range(0, (int)Enum.GetValues(typeof(Station.Types)).Cast<Station.Types>().Max()));
+        }
+    }
+
+    public bool NextStation()
+    {
+        stationNumber++;
+        if(stationNumber >= path.Count)
+        {
+            stationNumber = -1;
+            //gameManager.LoopComplete();
+            return false;
+            //GenerateRandomPath();
+        }
+
+
+        canvasManager.SetupStationsPreview(path, stationNumber);
+
+        return true;
+    }
+    */
 }
 
 public class StationPoolParams

@@ -16,7 +16,9 @@ public class InfoPanel : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        Rect rect = GetComponent<RectTransform>().rect;
+        Debug.Log(rect.x + " " + rect.y);
+        transform.position = Input.mousePosition;
     }
 
     public void SetUp(PassengerInfo info, string oName = "", string oDesc = "")
