@@ -610,7 +610,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d4af8f6b1da1bd48a4e596d17634b67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stationTemplate: {fileID: 0}
+  stationTemplate: {fileID: 11400000, guid: ebc0c81cf8131154f8f055df32ead3d8, type: 2}
   saved: []
   inQueue: []
   queueSpots:

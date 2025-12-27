@@ -6,6 +6,7 @@ public class Furnace : Building, IOnBoardEffect
     public PlayerManager playerManager;
     TriggerEffectHandler triggerEffectHandler;
     int addAmount = 1;
+
     public override void Awake()
     {
         base.Awake();
@@ -14,13 +15,13 @@ public class Furnace : Building, IOnBoardEffect
         triggerEffectHandler.AddEffect(gameObject);
 
     }
-    public bool CheckTrigger(Passenger p)
+    public bool OnBoardCheckTrigger(Passenger p)
     {
         //Debug.Log("checkk");
         return true;
     }
 
-    public IEnumerator Trigger(Passenger p)
+    public IEnumerator OnBoardTrigger(Passenger p)
     {
         //Debug.Log("trigggerrrs");
         playerManager.AddPositive(addAmount);

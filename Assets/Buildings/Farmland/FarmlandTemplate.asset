@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c1ba5b4b437ec34eb0b15eeb4b6bb5c, type: 3}
+  m_Name: FarmlandTemplate
+  m_EditorClassIdentifier: 
+  itemType: 1
+  rarity: 0
+  baseCost: 5
+  buildingName: Furnace
+  description: Generate 1 gold whenever a fire passenger is boarded
+  prefab: {fileID: 0}
+  mapPrefab: {fileID: 2105701783349934786, guid: f0424f0aef5dbe9489d675f088a7c299, type: 3}
+  itemPrefab: {fileID: 2453859669072495849, guid: 799e8871f86a1e94f8c580f035e1fe86, type: 3}
+  occupiedSpaces:
+  - {x: 0, y: 0}
+  frequency: 1

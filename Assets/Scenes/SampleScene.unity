@@ -1871,7 +1871,7 @@ MonoBehaviour:
   - {fileID: 481246475}
   - {fileID: 207941196}
   clockText: {fileID: 293335978}
-  clockTimer: 0
+  clockTimer: 800
   clockSpeed: 30
   mouseOverUI: 0
   trainMoveSimSpeed: 1

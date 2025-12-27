@@ -201,4 +201,18 @@ public class TrainManager : MonoBehaviour
     {
         passenger.HandleSnap(seat);
     }
+
+    public int GetPassengerCount()
+    {
+        int count = 0;
+        for (int i = 0; i < seats.Count; i++)
+        {
+            if (seats[i].occupiedGO != null)
+            {
+                count++;
+            }
+        }
+        return count;
+    }
+
 }

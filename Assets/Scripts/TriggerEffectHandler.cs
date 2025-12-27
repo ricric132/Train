@@ -6,6 +6,8 @@ using UnityEngine;
 public class TriggerEffectHandler : MonoBehaviour
 {
     List<IOnBoardEffect> onboardEffects = new List<IOnBoardEffect>();
+    List<IOnEnterStationEffect> enterStationEffects = new List<IOnEnterStationEffect>();
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
@@ -31,6 +33,13 @@ public class TriggerEffectHandler : MonoBehaviour
 
                 onboardEffects.Add(boardEffect);
             }
+
+            if (monoBehaviour is IOnEnterStationEffect stationEnterEffect)
+            {
+                //Debug.Log("successful addd" + monoBehaviour.name);
+
+                enterStationEffects.Add(stationEnterEffect);
+            }
         }
     }
 
@@ -39,11 +48,20 @@ public class TriggerEffectHandler : MonoBehaviour
         //Debug.Log("boardinggggg");
         for(int i = 0; i < onboardEffects.Count; i++)
         {
-            Debug.Log(i);
-            if (onboardEffects[i].CheckTrigger(p))
+            if (onboardEffects[i].OnBoardCheckTrigger(p))
             {
-                StartCoroutine(onboardEffects[i].Trigger(p));
+                StartCoroutine(onboardEffects[i].OnBoardTrigger(p));
             }
+        }
+
+        yield return null;
+    }
+
+    public IEnumerator TriggerOnEnterStation(Station station)
+    {
+        for (int i = 0; i < enterStationEffects.Count; i++)
+        {
+            StartCoroutine(enterStationEffects[i].OnEnterStationTrigger());
         }
 
         yield return null;

@@ -1,10 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using Unity.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
@@ -71,6 +68,7 @@ public class GameManager : MonoBehaviour
 
 
 
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -92,6 +90,7 @@ public class GameManager : MonoBehaviour
         map.Enable();
 
         baseQuota = startingQuota;
+        canvasManager.UpdateQuotaText(baseQuota);
         
     }
 
@@ -228,9 +227,10 @@ public class GameManager : MonoBehaviour
         yield return StartCoroutine(trainManager.SimulateEnterStation());
 
         Station curStation = station;
+
         yield return StartCoroutine(trainManager.SimulatePassengerEffects(curStation));
         yield return StartCoroutine(curStation.StationEnter());
-
+        yield return StartCoroutine(triggerEffectHandler.TriggerOnEnterStation(curStation));
 
         prevState = state;
         state = GameState.Default;
@@ -286,7 +286,7 @@ public class GameManager : MonoBehaviour
         QuotaIncreaseFunction();
 
         clockTimer = 0.0f;
-        yield return LeaveStation();
+        yield return StartCoroutine(LeaveStation());
         trainManager.stopped = false;
 
     }

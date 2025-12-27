@@ -90,7 +90,7 @@ public class Station : MonoBehaviour
 
     public virtual Passenger AddPassenger(SpeciesSO species)
     {
-        Transform emptySpot = GetEmptyQueueSpot();
+        SnappingPoint emptySpot = GetEmptyQueueSpot();
 
         if(emptySpot == null)
         {
@@ -103,9 +103,10 @@ public class Station : MonoBehaviour
         inQueue.Add(p);
 
 
-        p.queueSpot = emptySpot;
-        p.transform.parent = emptySpot;
+        p.queueSpot = emptySpot.transform;
+        p.transform.parent = emptySpot.transform;
         p.transform.localPosition = Vector3.zero;
+        emptySpot.occupiedGO = p.gameObject;
 
         Debug.Log("spawn success");
 
@@ -127,6 +128,7 @@ public class Station : MonoBehaviour
 
     public virtual void RemovePassengers()
     {
+        Debug.Log("removed passengers at " + stationTemplate.buildingName);
         for(int i = 0; i < inQueue.Count; i++)
         {
             if (inQueue[i].seat == null)
@@ -136,6 +138,8 @@ public class Station : MonoBehaviour
                 
             }
         }
+
+        inQueue.Clear();
     }
 
     public virtual void UpdateQueueSpots()
@@ -149,13 +153,13 @@ public class Station : MonoBehaviour
         }
     }
 
-    Transform GetEmptyQueueSpot()
+    SnappingPoint GetEmptyQueueSpot()
     {
         for (int i = 0; i < queueSpots.Count; i++)
         {
             if (queueSpots[i].GetComponent<SnappingPoint>().occupiedGO == null)
             {
-                return queueSpots[i];
+                return queueSpots[i].GetComponent<SnappingPoint>();
             }
         }
 
