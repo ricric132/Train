@@ -6,7 +6,11 @@ public class Shop : MonoBehaviour
 
     void Awake()
     {
-        gameManager = FindFirstObjectByType<GameManager>();
+    }
+
+    private void Start()
+    {
+        gameManager = GameManager.Instance;
     }
 
     // Update is called once per frame

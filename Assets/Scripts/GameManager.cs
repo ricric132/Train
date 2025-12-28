@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
         ContractMenu
     }
 
+    public CameraManager cameraManager;
     public CanvasManager canvasManager;
     public TrainManager trainManager;
     public StationPath stationPath;
@@ -28,6 +29,8 @@ public class GameManager : MonoBehaviour
     public PassengerGenerator passengerGenerator;
 
     public TriggerEffectHandler triggerEffectHandler;
+
+
 
 
     int upgradeCurrencyGain;
@@ -66,12 +69,25 @@ public class GameManager : MonoBehaviour
     public float trainMoveSimSpeed = 1;
     public float animationSimSpeed = 1;
 
+    private static GameManager _instance;
+
+    public static GameManager Instance { get { return _instance; } }
 
 
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private void Awake()
     {
+        if (_instance != null && _instance != this)
+        {
+            Destroy(this.gameObject);
+            return;
+        }
+        else
+        {
+            _instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        
+        cameraManager = FindFirstObjectByType<CameraManager>();
         canvasManager = FindFirstObjectByType<CanvasManager>();
         trainManager = FindFirstObjectByType<TrainManager>();
         playerManager = FindFirstObjectByType<PlayerManager>();
@@ -81,7 +97,7 @@ public class GameManager : MonoBehaviour
         triggerEffectHandler = FindFirstObjectByType<TriggerEffectHandler>();
 
 
-        dayClock = new ClockTime(6*60, 24*60);
+        dayClock = new ClockTime(6 * 60, 24 * 60);
         state = GameState.Default;
         prevState = GameState.Default;
         upgradeCurrencyGain = baseUpgradeCurrencyGain;
@@ -90,8 +106,15 @@ public class GameManager : MonoBehaviour
         map.Enable();
 
         baseQuota = startingQuota;
+
+    }
+
+
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
+    {
         canvasManager.UpdateQuotaText(baseQuota);
-        
+
     }
 
     // Update is called once per frame
@@ -229,7 +252,9 @@ public class GameManager : MonoBehaviour
         Station curStation = station;
 
         yield return StartCoroutine(trainManager.SimulatePassengerEffects(curStation));
+        yield return new WaitForSeconds(1f);
         yield return StartCoroutine(curStation.StationEnter());
+        yield return new WaitForSeconds(1f);
         yield return StartCoroutine(triggerEffectHandler.TriggerOnEnterStation(curStation));
 
         prevState = state;

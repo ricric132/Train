@@ -11,8 +11,10 @@ public class SimSpeedControls : MonoBehaviour
     int animSpeedIndex = 0;
     [SerializeField] TextMeshProUGUI animSpeedText;
 
-    void Awake()
+    void Start()
     {
+        gameManager = GameManager.Instance;
+
         gameManager.trainMoveSimSpeed = speedValues[trainSpeedIndex];
         trainSpeedText.text =  "x"+speedValues[trainSpeedIndex];
 

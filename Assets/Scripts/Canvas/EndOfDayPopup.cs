@@ -8,9 +8,9 @@ public class EndOfDayPopup : MonoBehaviour
     public TextMeshProUGUI successText;
     public GameManager gameManager;
 
-    private void Awake()
+    private void Start()
     {
-        gameManager = FindFirstObjectByType<GameManager>();
+        gameManager = GameManager.Instance;
     }
 
     public void Setup(int quota, int coinAmt) //want to add like an overall passenger log

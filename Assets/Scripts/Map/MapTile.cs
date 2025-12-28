@@ -23,7 +23,7 @@ public class MapTile : MonoBehaviour
     {
         if (go && go.tag == "Station")
         {
-            Debug.Log(go);
+           // Debug.Log(go);
             return go.GetComponent<StationTile>().station;
         }
 

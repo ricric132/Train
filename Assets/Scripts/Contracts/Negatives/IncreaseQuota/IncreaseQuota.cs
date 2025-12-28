@@ -10,14 +10,14 @@ public class IncreaseQuota : ContractEffect
         description = "Increases quota by " + (increaseAmount * 100) + "% for next day";
     }
 
-    public override void EnableEffect(GameManager gm)
+    public override void EnableEffect()
     {
-        gm.UpdateQuotaMult(increaseAmount);
+        GameManager.Instance.UpdateQuotaMult(increaseAmount);
     }
 
-    public override void RevertEffect(GameManager gm)
+    public override void RevertEffect()
     {
-        gm.UpdateQuotaMult(-increaseAmount);    
+        GameManager.Instance.UpdateQuotaMult(-increaseAmount);    
 
     }
 }

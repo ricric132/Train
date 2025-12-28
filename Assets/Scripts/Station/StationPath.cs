@@ -34,6 +34,8 @@ public class StationPath : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        gameManager = GameManager.Instance;
+        canvasManager = gameManager.canvasManager;
         //GenerateRandomStartingPath();
         //GoToStation(0);
     }

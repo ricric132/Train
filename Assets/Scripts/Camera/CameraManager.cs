@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Unity.Cinemachine;
 using Unity.VisualScripting;
@@ -13,6 +14,8 @@ public class CameraManager : MonoBehaviour
         mapCam
     }
     CamState camState = CamState.train;
+
+    [SerializeField] List<Camera> allCams;
 
     [SerializeField] CanvasManager canvasManager;
 
@@ -213,5 +216,38 @@ public class CameraManager : MonoBehaviour
         //canvasManager.SetCanvasMode(state);
     }
 
+    public Camera FindObjectCamera(GameObject go)
+    {
+        for (int i = 0; i < allCams.Count; i++)
+        {
+            Camera cam = allCams[i];
+            float vert = cam.orthographicSize;
+            float horiz = vert * cam.aspect;
+
+            if (Mathf.Abs(go.transform.position.x - cam.transform.position.x) <= horiz && Mathf.Abs(go.transform.position.y - cam.transform.position.y) <= vert)
+            {
+                return cam;
+            }
+        }
+
+        return null;
+    }
+
+    public Camera FindObjectCamera(Vector3 v)
+    {
+        for (int i = 0; i < allCams.Count; i++)
+        {
+            Camera cam = allCams[i];
+            float vert = cam.orthographicSize;
+            float horiz = vert * cam.aspect;
+
+            if (Mathf.Abs(v.x - cam.transform.position.x) <= horiz && Mathf.Abs(v.y - cam.transform.position.y) <= vert)
+            {
+                return cam;
+            }
+        }
+
+        return null;
+    }
 
 }

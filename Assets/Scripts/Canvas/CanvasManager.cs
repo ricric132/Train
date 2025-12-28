@@ -29,6 +29,8 @@ public class CanvasManager : MonoBehaviour
     [SerializeField] GameObject shopCanvas;
     [SerializeField] GameObject contractCanvas;
 
+    public GameObject effectsCanvas;
+
     [SerializeField] GameObject endOfDayPopup;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created

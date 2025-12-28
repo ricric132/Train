@@ -17,7 +17,7 @@ public class InfoPanel : MonoBehaviour
     void Update()
     {
         Rect rect = GetComponent<RectTransform>().rect;
-        Debug.Log(rect.x + " " + rect.y);
+        //Debug.Log(rect.x + " " + rect.y);
         transform.position = Input.mousePosition;
     }
 

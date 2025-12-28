@@ -10,12 +10,12 @@ public class ContractEffect : ScriptableObject
         
     }
 
-    public virtual void EnableEffect(GameManager gm)
+    public virtual void EnableEffect()
     {
 
     }
 
-    public virtual void RevertEffect(GameManager gm)
+    public virtual void RevertEffect()
     {
 
     }

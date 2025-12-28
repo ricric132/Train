@@ -15,11 +15,11 @@ MonoBehaviour:
   itemType: 1
   rarity: 0
   baseCost: 5
-  buildingName: Furnace
-  description: Generate 1 gold whenever a fire passenger is boarded
+  buildingName: Farmland
+  description: When entering a station with odd amount of passengers, SKIP 1
   prefab: {fileID: 0}
-  mapPrefab: {fileID: 2105701783349934786, guid: f0424f0aef5dbe9489d675f088a7c299, type: 3}
-  itemPrefab: {fileID: 2453859669072495849, guid: 799e8871f86a1e94f8c580f035e1fe86, type: 3}
+  mapPrefab: {fileID: 2105701783349934786, guid: 436e944606e16aa44a8441bfcfba8357, type: 3}
+  itemPrefab: {fileID: 2453859669072495849, guid: 5d4121d5f6cae5440b4e91b097b868f8, type: 3}
   occupiedSpaces:
   - {x: 0, y: 0}
   frequency: 1

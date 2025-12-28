@@ -5,7 +5,7 @@ public class ContractGiver : MonoBehaviour
     GameManager gameManager;
     void Awake()
     {
-        gameManager = FindFirstObjectByType<GameManager>();
+        gameManager = GameManager.Instance;
     }
 
     private void OnMouseDown()

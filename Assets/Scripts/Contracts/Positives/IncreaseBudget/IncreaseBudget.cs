@@ -10,15 +10,15 @@ public class IncreaseBudget : ContractEffect
         description = "Increases budget by " + (increaseAmount * 100) + "% for next day";
     }
 
-    public override void EnableEffect(GameManager gm)
+    public override void EnableEffect()
     {
-        gm.UpdateCurrencyMult(increaseAmount);
+        GameManager.Instance.UpdateCurrencyMult(increaseAmount);
         
     }
 
-    public override void RevertEffect(GameManager gm)
+    public override void RevertEffect()
     {
-        gm.UpdateCurrencyMult(-increaseAmount);
+        GameManager.Instance.UpdateCurrencyMult(-increaseAmount);
     }
 }
 

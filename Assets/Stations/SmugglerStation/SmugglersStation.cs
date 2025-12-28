@@ -41,7 +41,7 @@ public class SmugglersStation : Station
             curPassenger.transform.parent = randSeat.transform;
             curPassenger.transform.localPosition = Vector3.zero;
             randSeat.occupiedGO = curPassenger.gameObject;
-
+            curPassenger.ManualStart();
             curPassenger.UpdateCoins(curPassenger.info.coins);
 
             curPassenger.OnSeated(randSeat);

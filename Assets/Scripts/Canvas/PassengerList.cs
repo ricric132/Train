@@ -40,7 +40,7 @@ public class PassengerList : MonoBehaviour
                 PassengerListItem newItem = Instantiate(listItemPrefab, listParent).GetComponent<PassengerListItem>();
                 items.Add(newItem);
             }
-            Debug.Log(speciesTable[i].species.speciesName + speciesTable[i].amountRemaining + speciesTable[i].totalAmount);
+            //Debug.Log(speciesTable[i].species.speciesName + speciesTable[i].amountRemaining + speciesTable[i].totalAmount);
             items[i].Setup(speciesTable[i].species.speciesName,speciesTable[i].amountRemaining, speciesTable[i].totalAmount);
         }
     }

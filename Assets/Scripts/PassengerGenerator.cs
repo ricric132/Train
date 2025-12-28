@@ -93,6 +93,8 @@ public class PassengerGenerator : MonoBehaviour
 
         cur.SetUp(info);
 
+        cur.ManualStart();
+
         return cur;
     }
 

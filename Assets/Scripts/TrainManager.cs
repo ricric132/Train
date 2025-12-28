@@ -28,6 +28,7 @@ public class TrainManager : MonoBehaviour
     void Start()
     {
         trainIcon = FindFirstObjectByType<MapTrain>();
+        gameManager = GameManager.Instance;
     }
 
     // Update is called once per frame

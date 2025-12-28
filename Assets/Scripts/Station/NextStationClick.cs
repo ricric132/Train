@@ -7,10 +7,10 @@ public class NextStationClick : MonoBehaviour
     GameManager gameManager;
     TrainManager trainManager;
 
-    void Awake()
+    void Start()
     {
-        gameManager = FindFirstObjectByType<GameManager>();
-        trainManager = FindFirstObjectByType<TrainManager>();
+        gameManager = GameManager.Instance;
+        trainManager = gameManager.trainManager;
     }
 
     // Update is called once per frame

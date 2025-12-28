@@ -30,22 +30,48 @@ public class Passenger : DragObj
     public TriggerEffectHandler triggerEffectHandler;
     public bool stillActive = true;
 
+    bool awakeRan = false;
+    bool startRan = false;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public override void Awake()
     {
+        if (awakeRan)
+        {
+            return;
+        }
+
         base.Awake();
         canOverlap = false;
         canvas = GameObject.Find("MainCanvas");
-        playerManager = gameManager.playerManager; // should group all finds tgth
+
+        effectPopup = GetComponent<SpawnEffectPopup>();
+        awakeRan = true;
+    }
+
+    public override void Start()
+    {
+        if (startRan)
+        {
+            return;
+        }
+
+        base.Start();
+        playerManager = gameManager.playerManager;
         trainManager = gameManager.trainManager;
         path = gameManager.stationPath;
         passengerGenerator = gameManager.passengerGenerator;
         triggerEffectHandler = gameManager.triggerEffectHandler;
-
-
-        effectPopup = GetComponent<SpawnEffectPopup>();
-
+        startRan = true;
     }
+
+    public void ManualStart()
+    {
+        Awake();
+        Start();
+    }
+
+
 
     // Update is called once per frame
     public override void Update()

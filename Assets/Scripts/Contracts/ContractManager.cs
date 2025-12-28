@@ -19,7 +19,7 @@ public class ContractManager : MonoBehaviour
 
     private void Awake()
     {
-        gameManager = FindAnyObjectByType<GameManager>();
+        gameManager = GameManager.Instance;
     }
 
     public void Setup()
@@ -86,7 +86,7 @@ public class ContractManager : MonoBehaviour
     public void ActivateContract(Contract contract)
     {
         allActiveContracts.Add(contract);
-        contract.positive.EnableEffect(gameManager);
-        contract.negative.EnableEffect(gameManager);
+        contract.positive.EnableEffect();
+        contract.negative.EnableEffect();
     }
 }

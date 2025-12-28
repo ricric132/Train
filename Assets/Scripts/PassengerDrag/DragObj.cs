@@ -27,9 +27,15 @@ public class DragObj : MonoBehaviour
        defaultScale = visual.transform.localScale;
 
        pickupScale = defaultScale * 1.2f;
-       dragManager = FindFirstObjectByType<DragManager>();
-       gameManager = FindFirstObjectByType<GameManager>();
+       
     }
+
+    public virtual void Start()
+    {
+        gameManager = GameManager.Instance;
+        dragManager = FindFirstObjectByType<DragManager>();
+    }
+
 
     // Update is called once per frame
     public virtual void Update()
