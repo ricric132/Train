@@ -13,7 +13,6 @@ public class Furnace : Building, IOnBoardEffect
         playerManager = FindFirstObjectByType<PlayerManager>();
         triggerEffectHandler = FindFirstObjectByType<TriggerEffectHandler>();
         triggerEffectHandler.AddEffect(gameObject);
-
     }
     public bool OnBoardCheckTrigger(Passenger p)
     {

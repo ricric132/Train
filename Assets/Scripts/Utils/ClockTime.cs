@@ -20,6 +20,11 @@ public class ClockTime
         return time > end - start;
     }
 
+    public float GetPercentage(float time)
+    {
+        return time / (end - start);
+    }
+
     public ClockTime(float start, float end)
     {
         this.start = start;

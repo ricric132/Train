@@ -40,7 +40,7 @@ public class ContractManager : MonoBehaviour
         for (int i = 0; i < contractChoiceGOs.Count; i++)
         {
             curQuotaMult += contractChoiceGOs[i].GetComponent<ContractItem>().GetQuotaIncrease();
-            curCurrencyMult += contractChoiceGOs[i].GetComponent<ContractItem>().GetQuotaIncrease();
+            curCurrencyMult += contractChoiceGOs[i].GetComponent<ContractItem>().GetBudgetIncrease();
         }
 
         if (curQuotaMult > 0)
