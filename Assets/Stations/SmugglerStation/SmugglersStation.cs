@@ -6,10 +6,6 @@ using UnityEngine;
 
 public class SmugglersStation : Station
 {
-    public SmugglersStation(BuildingTemplateSO _stationTemplate) : base(_stationTemplate)
-    {
-
-    }
 
     public override void Awake()
     {
@@ -25,7 +21,7 @@ public class SmugglersStation : Station
         List<Seat> emptySeats = new List<Seat>();
         for(int i = 0; i < trainManager.seats.Count; i++)
         {
-            if (trainManager.seats[i].occupiedGO == null)
+            if (trainManager.seats[i].occupiedGO == null && trainManager.seats[i].CheckActive())
             {
                 emptySeats.Add(trainManager.seats[i]);
             }

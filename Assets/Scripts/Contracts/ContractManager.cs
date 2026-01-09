@@ -89,4 +89,16 @@ public class ContractManager : MonoBehaviour
         contract.positive.EnableEffect();
         contract.negative.EnableEffect();
     }
+
+    public void ContractTimeStep()
+    {
+        for(int i = 0;i < allActiveContracts.Count; i++)
+        {
+            //implement different duration effects
+            allActiveContracts[i].positive.RevertEffect();
+            allActiveContracts[i].negative.RevertEffect();
+        }
+
+        allActiveContracts.Clear();
+    }
 }

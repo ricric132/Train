@@ -30,8 +30,7 @@ public class GameManager : MonoBehaviour
 
     public TriggerEffectHandler triggerEffectHandler;
 
-
-
+    public DragManager dragManager;
 
     int upgradeCurrencyGain;
     int baseUpgradeCurrencyGain = 10;
@@ -95,6 +94,7 @@ public class GameManager : MonoBehaviour
         contractManager = FindFirstObjectByType<ContractManager>();
         passengerGenerator = FindFirstObjectByType<PassengerGenerator>();
         triggerEffectHandler = FindFirstObjectByType<TriggerEffectHandler>();
+        dragManager = FindFirstObjectByType<DragManager>();
 
 
         dayClock = new ClockTime(6 * 60, 24 * 60);
@@ -273,6 +273,7 @@ public class GameManager : MonoBehaviour
         stationPath.GenerateUpgradeStation();
         yield return StartCoroutine(trainManager.SimulateEnterStation());
 
+        trainManager.DecrimentContractDays();
         canvasManager.OpenEndOfDayOverviewPopup();
         canvasManager.SetupEndOfDayData(quotaAmount, playerManager.GetPositive());
         playerManager.UpdateMoney(upgradeCurrencyGain);
@@ -366,6 +367,9 @@ public class GameManager : MonoBehaviour
         return quotaAmount < playerManager.GetPositive();
     }
 
-
+    public bool RecieveInput()
+    {
+        return state != GameState.PlayingAnimation;
+    }
 
 }

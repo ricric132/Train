@@ -10,10 +10,17 @@ public class Furnace : Building, IOnBoardEffect
     public override void Awake()
     {
         base.Awake();
-        playerManager = FindFirstObjectByType<PlayerManager>();
-        triggerEffectHandler = FindFirstObjectByType<TriggerEffectHandler>();
+ 
+    }
+
+    public override void Start()
+    {
+        base.Start();
+        playerManager = GameManager.Instance.playerManager;
+        triggerEffectHandler = GameManager.Instance.triggerEffectHandler;
         triggerEffectHandler.AddEffect(gameObject);
     }
+
     public bool OnBoardCheckTrigger(Passenger p)
     {
         //Debug.Log("checkk");

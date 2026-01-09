@@ -5,10 +5,6 @@ public class TimeWarpStation : Station
 {
     int stationsSkipped; 
 
-    public TimeWarpStation(BuildingTemplateSO _stationTemplate) : base(_stationTemplate)
-    {
-
-    }
 
     public override void Awake()
     {

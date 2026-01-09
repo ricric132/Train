@@ -22,9 +22,9 @@ public class Imp : Passenger
         }
     }
 
-    public override void OnSeated(Seat _seat)
+    public override void DoSeatedEffect(Seat _seat)
     {
-        base.OnSeated(_seat);
+        base.DoSeatedEffect(_seat);
         
         if(Random.value < drunkness * 0.1f)
         {

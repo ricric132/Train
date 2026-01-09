@@ -2,10 +2,6 @@ using UnityEngine;
 
 public class SoulWellStation : Station
 {
-    public SoulWellStation(BuildingTemplateSO _stationTemplate) : base(_stationTemplate)
-    {
-
-    }
 
     public override void Awake()
     {

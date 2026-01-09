@@ -12,13 +12,11 @@ public class SnappingPoint : MonoBehaviour
     public GameObject availableIndicator;
 
 
-    public virtual void Awake()
+    public virtual void Start()
     {
-        dragManager = FindFirstObjectByType<DragManager>();
+        dragManager = GameManager.Instance.dragManager;
         dragManager.snappingpoints.Add(this);
-        stationManager = FindFirstObjectByType<StationPath>();
-
-        
+        stationManager = GameManager.Instance.stationPath;
     }
 
 

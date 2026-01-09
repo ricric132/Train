@@ -77,20 +77,21 @@ public class PassengerGenerator : MonoBehaviour
         PassengerInfo info = new PassengerInfo(name, species);
         Passenger cur = Instantiate(species.prefab, spawnPoint).GetComponent<Passenger>();
         cur.SetUp(info);
-
+        cur.ManualStart();
+        cur.partOfPool = true;
         UpdateSpeciesTableRemaining(species, -1);
 
         return cur;
     }
 
-    public Passenger GenerateCharacter(SpeciesSO species)
+    public Passenger GenerateCharacter(SpeciesSO species, bool fromPool = false)
     {
         string name = ((Names)UnityEngine.Random.Range(0, (int)Enum.GetValues(typeof(Names)).Cast<Names>().Max())).ToString();
 
         PassengerInfo info = new PassengerInfo(name, species);
 
         Passenger cur = Instantiate(species.prefab, spawnPoint).GetComponent<Passenger>();
-
+        cur.partOfPool = fromPool;
         cur.SetUp(info);
 
         cur.ManualStart();
@@ -129,7 +130,7 @@ public class PassengerGenerator : MonoBehaviour
         passengerList.Setup(speciesTable);
     }
 
-    public void UpdateSpeciesTableRemaining(SpeciesSO species, int amt)
+    public void UpdateSpeciesTableRemaining(SpeciesSO species, int amt) //specially generated from outside off pool should not add to this
     {
         SpeciesStats speciesStats = speciesTable.Find(x => x.species == species);
         if (speciesStats != null)

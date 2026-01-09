@@ -27,7 +27,7 @@ public class SpawnEffectPopup : MonoBehaviour
 
     public void SpawnPopup(Transform spawnPoint, int addedNumber, popupType type)
     {
-        Debug.Log("Popup");
+        //Debug.Log("Popup");
         GameObject effect = Instantiate(popups[(int)type], spawnPoint);
         effect.GetComponent<EffectPopup>().SetUp(addedNumber, lifeSpan);
     }

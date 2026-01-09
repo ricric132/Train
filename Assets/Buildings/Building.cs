@@ -13,6 +13,16 @@ public class Building : MonoBehaviour
 
     }
 
+    public virtual void Start()
+    {
+
+    }
+
+    public virtual void OnEnable()
+    {
+
+    }
+
     public virtual void Setup()
     {
         //make more robust later

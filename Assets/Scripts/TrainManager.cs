@@ -185,9 +185,28 @@ public class TrainManager : MonoBehaviour
 
     public Passenger GetRandomPassenger()
     {
-        List<Passenger> allPassengers = new List<Passenger>();
+        List<Passenger> allPassengers = GetAllPassengers();
 
-        for (int i = 0; i < seats.Count; i++)
+        return allPassengers[UnityEngine.Random.Range(0, allPassengers.Count)];
+    }
+
+    public Passenger GetRandomOtherPassenger(Passenger p)
+    {
+        List<Passenger> allPassengers = GetAllOtherPassengers(p);
+
+        return allPassengers[UnityEngine.Random.Range(0, allPassengers.Count)];
+    }
+
+    public List<Passenger> GetAllPassengers(int start = 0, int end = 0)
+    {
+        List<Passenger> allPassengers = new List<Passenger>();
+        int lastIndex = seats.Count;
+        if(end > 0)
+        {
+            lastIndex = Mathf.Min(lastIndex, end);
+        }
+
+        for (int i = start; i < lastIndex; i++)
         {
             if (seats[i].occupiedGO != null)
             {
@@ -195,12 +214,45 @@ public class TrainManager : MonoBehaviour
             }
         }
 
-        return allPassengers[UnityEngine.Random.Range(0, allPassengers.Count)];
+        return allPassengers;
+    }
+
+    public List<Passenger> GetAllOtherPassengers(Passenger p, int start = 0, int end = 0)
+    {
+        List<Passenger> allPassengers = new List<Passenger>();
+        int lastIndex = seats.Count;
+        if (end > 0)
+        {
+            lastIndex = Mathf.Min(lastIndex, end);
+        }
+
+        for (int i = start; i < lastIndex; i++)
+        {
+            if (seats[i].GetPassenger() && seats[i].GetPassenger() != p)
+            {
+                allPassengers.Add(seats[i].GetPassenger());
+            }
+        }
+
+        return allPassengers;
     }
 
     public void AddPassenger(Passenger passenger, Seat seat)
     {
         passenger.HandleSnap(seat);
+    }
+
+    public List<Seat> GetActiveSeats()
+    {
+        List<Seat> activeSeats = new List<Seat>();
+        for (int i = 0; i < seats.Count; i++)
+        {
+            if (seats[i].CheckActive())
+            {
+                activeSeats.Add(seats[i]);
+            }
+        }
+        return activeSeats;
     }
 
     public int GetPassengerCount()
@@ -214,6 +266,31 @@ public class TrainManager : MonoBehaviour
             }
         }
         return count;
+    }
+
+    public void ContractDisableSeats(int amount, int days)
+    {
+        List<Seat> activeSeats = GetActiveSeats();
+
+        for (int i = 0; i < amount; i++)
+        {
+            Seat toBeDisabled = activeSeats[UnityEngine.Random.Range(0, activeSeats.Count)];
+            if (toBeDisabled != null)
+            {
+                toBeDisabled.contractDisableDuration += days;
+            }
+        }
+    }
+
+    public void DecrimentContractDays()
+    {
+        for (int i = 0; i < seats.Count; i++)
+        {
+            if(seats[i].contractDisableDuration > 0)
+            {
+                seats[i].contractDisableDuration -= 1;
+            }
+        }
     }
 
 }

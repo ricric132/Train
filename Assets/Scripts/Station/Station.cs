@@ -43,11 +43,6 @@ public class Station : MonoBehaviour
         cameraManager = FindFirstObjectByType<CameraManager>();
     }
 
-    public Station(BuildingTemplateSO _stationTemplate)
-    {
-        this.stationTemplate = _stationTemplate;
-    }
-
     public virtual IEnumerator StationEnter()
     {
         yield return null;

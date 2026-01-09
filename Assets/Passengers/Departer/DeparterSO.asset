@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac19a542fdd4be84981f537001249848, type: 3}
+  m_Name: DeparterSO
+  m_EditorClassIdentifier: 
+  speciesName: Departer
+  description: When another passenger offboards gain +1 coins, +2 if the passenger
+    reached thier destination
+  baseCoins: 3
+  baseStations: 6
+  prefab: {fileID: 8432666971866891856, guid: 65afb74901ff90a44a36e3dc79cf24be, type: 3}

@@ -18,7 +18,7 @@ public class DuplicatingSlime : Passenger
 
             for (int i = 0; i < adj.Count; i++)
             {
-                if (adj[i].GetPassenger() == null)
+                if (adj[i].GetPassenger() == null && adj[i].CheckActive())
                 {
                     Passenger dupe = passengerGenerator.GenerateCharacter(info.species);
                     info.CopyTo(dupe.info);

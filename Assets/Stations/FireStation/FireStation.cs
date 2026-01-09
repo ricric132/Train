@@ -6,10 +6,7 @@ public class FireStation : Station
     int addedFireSpirits;
     [SerializeField] SpeciesSO fireSpiritSO;
 
-    public FireStation(BuildingTemplateSO _stationTemplate) : base(_stationTemplate)
-    {
 
-    }
     public override void Awake()
     {
         base.Awake();

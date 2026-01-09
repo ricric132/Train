@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac19a542fdd4be84981f537001249848, type: 3}
+  m_Name: SkeletonDogSO
+  m_EditorClassIdentifier: 
+  speciesName: Skeleton Dog
+  description: 'OnBoard: Consume 1 bone to skip 2 and gain 5 gold'
+  baseCoins: 5
+  baseStations: 4
+  prefab: {fileID: 8432666971866891856, guid: 2deabe12d9720ce4a94755e139aeddd6, type: 3}

@@ -55,7 +55,7 @@ public class DragManager : MonoBehaviour
 
             if (startingPoint.gameObject.tag == "QueueSpot")
             {
-                if (snappingpoints[i].gameObject.tag == "Seat" && snappingpoints[i].occupiedGO == null)
+                if (snappingpoints[i].gameObject.tag == "Seat" && snappingpoints[i].occupiedGO == null && snappingpoints[i].GetComponent<Seat>().CheckActive())
                 {
                     snappingpoints[i].ShowIndicator();
                 }

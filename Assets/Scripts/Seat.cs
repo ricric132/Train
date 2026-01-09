@@ -3,16 +3,29 @@ using UnityEngine;
 
 public class Seat : SnappingPoint
 {
-    
-    public override void Awake()
+    int boneCount;
+
+    public int contractDisableDuration = 0;
+
+    [SerializeField] GameObject disbledIndicator;
+
+    public override void Start()
     {
-        base.Awake();
+        base.Start();
     }
 
     // Update is called once per frame
     public override void Update()
     {
         base.Update();
+        if (CheckActive())
+        {
+            disbledIndicator.SetActive(false);
+        }
+        else
+        {
+            disbledIndicator.SetActive(true);
+        }
     }
 
     public IEnumerator NextStation() {
@@ -31,6 +44,27 @@ public class Seat : SnappingPoint
             return passenger;   
         }
         return null;
+    }
+
+    public bool CheckActive()
+    {
+        if(contractDisableDuration > 0)
+        {
+            return false;
+        }
+        //can add other conditions for other disabling effects
+
+        return true;
+    }
+
+    public int GetBones()
+    {
+        return boneCount;
+    }
+
+    public void UpdateBones(int amt)
+    {
+        boneCount += amt;
     }
 
 }

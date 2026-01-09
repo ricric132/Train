@@ -11,6 +11,7 @@ public class ShopSlot : MonoBehaviour
 
     public ShopItemInfoPanel infoPanel;
 
+    [SerializeField] Transform itemParent;
 
     void Awake()
     {
@@ -41,7 +42,7 @@ public class ShopSlot : MonoBehaviour
         ShopItem item = shopManager.GetRandomItem();
         item.slot = this;
         curItem = item;
-        item.gameObject.transform.parent = transform;
+        item.gameObject.transform.parent = itemParent;
         item.gameObject.transform.localPosition = Vector3.zero;
         item.gameObject.transform.localScale = Vector3.one;
 

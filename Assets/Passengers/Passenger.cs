@@ -7,31 +7,37 @@ using UnityEngine;
 public class Passenger : DragObj
 {
     public GameObject infoPanelPrefab;
-    public GameObject activeInfoPanel;
-    public GameObject canvas;
+    [HideInInspector] public GameObject activeInfoPanel;
+    [HideInInspector] public GameObject canvas;
 
-    public PassengerInfo info;
-    public PlayerManager playerManager;
+    [HideInInspector] public PassengerInfo info;
+    [HideInInspector] public PlayerManager playerManager;
 
     bool queueing;
-    public Transform queueSpot;
+    [HideInInspector] public Transform queueSpot;
 
-    public Station station;
+    [HideInInspector] public Station station;
 
-    public SpawnEffectPopup effectPopup;
+    [HideInInspector] public SpawnEffectPopup effectPopup;
     public Transform effectsCanvas;
     public GameObject destinationReachedIndicator;
 
     public TextMeshProUGUI coinText;
     public TextMeshProUGUI timeText;
-    public TrainManager trainManager;
-    public StationPath path;
-    public PassengerGenerator passengerGenerator;
-    public TriggerEffectHandler triggerEffectHandler;
-    public bool stillActive = true;
+    [HideInInspector] public TrainManager trainManager;
+    [HideInInspector] public StationPath path;
+    [HideInInspector] public PassengerGenerator passengerGenerator;
+    [HideInInspector] public TriggerEffectHandler triggerEffectHandler;
+    [HideInInspector] public bool stillActive = true;
 
     bool awakeRan = false;
     bool startRan = false;
+
+    public bool partOfPool = false;
+
+    public PassengerAnimator passengerAnimator;
+
+    
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     public override void Awake()
@@ -46,6 +52,7 @@ public class Passenger : DragObj
         canvas = GameObject.Find("MainCanvas");
 
         effectPopup = GetComponent<SpawnEffectPopup>();
+        passengerAnimator = GetComponent<PassengerAnimator>();
         awakeRan = true;
     }
 
@@ -137,9 +144,11 @@ public class Passenger : DragObj
 
     public virtual IEnumerator NextStation()
     {
+        yield return new WaitForSeconds(0.5f / gameManager.animationSimSpeed);
+
         yield return StartCoroutine(NextStationAction());
         UpdateStationsRemaining(-1);
-        yield return new WaitForSeconds(1f/gameManager.animationSimSpeed);
+        yield return new WaitForSeconds(0.5f/gameManager.animationSimSpeed);
 
        
         
@@ -147,6 +156,7 @@ public class Passenger : DragObj
     }
     public virtual IEnumerator NextStationAction()
     {
+        passengerAnimator.NewStationEffectAnim();
         yield return null;
         //Debug.Log(info.GetFullName());
     }
@@ -171,14 +181,16 @@ public class Passenger : DragObj
         }
     }
 
-    public virtual void DoSeatedEffect(Seat _seat)
+    public virtual void DoSeatedEffect(Seat _seat) // this should probably be a coroutine
     {
+        passengerAnimator.OnboardAnim();
         StartCoroutine(triggerEffectHandler.TriggerOnBoard(this));
     }
 
-    public void OnDepart()
+    public virtual void OnDepart()
     {
         path.GetCurStation().OnPassengerDepart(this);
+        StartCoroutine(triggerEffectHandler.TriggerOffBoard(this));
         if (!ReachedStation())
         {
             playerManager.AddNegative(info.stopsRemaining);
@@ -196,7 +208,11 @@ public class Passenger : DragObj
 
     public void Remove()
     {
-        passengerGenerator.UpdateSpeciesTableRemaining(info.species, 1);
+        if (partOfPool)
+        {
+            passengerGenerator.UpdateSpeciesTableRemaining(info.species, 1);
+        }
+
         if (seat != null && seat.occupiedGO == gameObject)
         {
             seat.occupiedGO = null;
@@ -225,8 +241,9 @@ public class Passenger : DragObj
         {
             if (seat != null)
             {
-                Debug.Log("departed");
-                seat.occupiedGO = null;
+                //Debug.Log("departed");
+
+                //seat.occupiedGO = null;
                 prevParentSnap.occupiedGO = null;
                 transform.parent = snapPoint.transform;
                 transform.localPosition = Vector3.zero;
@@ -247,25 +264,38 @@ public class Passenger : DragObj
         }
         else
         {
+            Seat snapPointSeat = null;
+            snapPoint.gameObject.TryGetComponent<Seat>(out snapPointSeat);
 
-            transform.parent = snapPoint.transform;
-            transform.localPosition = Vector3.zero;
-            if(prevParentSnap != null)
+            if (snapPointSeat != null) 
             {
-                prevParentSnap.occupiedGO = null;
-            }
-            snapPoint.occupiedGO = gameObject;
-
-            if (snapPoint.tag == "Seat")
-            {
-                OnSeated(snapPoint.gameObject.GetComponent<Seat>());
+                if (snapPointSeat.CheckActive())
+                {
+                    SnapTo(snapPoint);
+                    OnSeated(snapPointSeat);
+                }
+                else
+                {
+                    ReturnToStart();
+                }
             }
             else
             {
+                SnapTo(snapPoint);
                 seat = null;
             }
         }
-        
+    }
+
+    void SnapTo(SnappingPoint snapPoint)
+    {
+        transform.parent = snapPoint.transform;
+        transform.localPosition = Vector3.zero;
+        if (prevParentSnap != null)
+        {
+            prevParentSnap.occupiedGO = null;
+        }
+        snapPoint.occupiedGO = gameObject;
     }
 
     public bool UpdateStationsRemaining(int amount)
@@ -285,9 +315,20 @@ public class Passenger : DragObj
 
     public void UpdateCoins(int amount)
     {
-
         info.coins += amount;
 
         effectPopup.SpawnPopup(effectsCanvas, amount, SpawnEffectPopup.popupType.coin);
     }
+
+    public virtual void Warm()//should trigger the effects manager to gain extra effects
+    {
+        UpdateCoins(1);
+    }
+
+    public virtual void Chill()
+    {
+        UpdateCoins(3);
+        UpdateStationsRemaining(1);
+    }
+
 }

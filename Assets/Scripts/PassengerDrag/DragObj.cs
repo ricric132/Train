@@ -5,22 +5,22 @@ public class DragObj : MonoBehaviour
 {
     public bool canOverlap = false;
 
-    public DragManager dragManager;
-    public bool isDragging = false;
-    public Vector3 dragOffset;
-    public Seat seat;
+    [HideInInspector] public DragManager dragManager;
+    [HideInInspector] public bool isDragging = false;
+    [HideInInspector] public Vector3 dragOffset;
+    [HideInInspector] public Seat seat;
 
-    public Vector3 startPos;
-    public Transform startParent;
-    public SnappingPoint prevParentSnap;
+    [HideInInspector] public Vector3 startPos;
+    [HideInInspector] public Transform startParent;
+    [HideInInspector] public SnappingPoint prevParentSnap;
 
-    public bool locked;
+    [HideInInspector] public bool locked;
 
     public GameObject visual;
     public Vector3 defaultScale;
     public Vector3 pickupScale;
 
-    public GameManager gameManager;
+    [HideInInspector] public GameManager gameManager;
 
     public virtual void Awake()
     {

@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class FireSpirit : Passenger
 {
-    int increaseAmount = 1;
     public override void DoSeatedEffect(Seat _seat)
     {
         base.DoSeatedEffect(_seat);
@@ -15,6 +14,6 @@ public class FireSpirit : Passenger
         {
             return;
         }
-        passenger.UpdateCoins(increaseAmount);
+        passenger.Warm();
     }
 }

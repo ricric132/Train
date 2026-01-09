@@ -2,8 +2,6 @@ using UnityEngine;
 
 public class IceSpirit : Passenger
 {
-    int increaseTimeAmount = 1;
-    int increaseFareAmount = 3;
     public override void DoSeatedEffect(Seat _seat)
     {
         base.DoSeatedEffect(_seat);
@@ -16,7 +14,6 @@ public class IceSpirit : Passenger
         {
             return;
         }
-        passenger.UpdateCoins(increaseFareAmount);
-        passenger.UpdateStationsRemaining(increaseTimeAmount);
+        passenger.Chill();
     }
 }

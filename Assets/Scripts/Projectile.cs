@@ -1,8 +1,5 @@
 using System.Collections;
-using System.Data;
-using Unity.VisualScripting;
 using UnityEngine;
-using System.Collections;
 
 public class Projectile : MonoBehaviour
 {
