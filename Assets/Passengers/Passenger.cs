@@ -53,7 +53,11 @@ public class Passenger : DragObj
 
         effectPopup = GetComponent<SpawnEffectPopup>();
         passengerAnimator = GetComponent<PassengerAnimator>();
+
+
         awakeRan = true;
+
+
     }
 
     public override void Start()
@@ -69,7 +73,20 @@ public class Passenger : DragObj
         path = gameManager.stationPath;
         passengerGenerator = gameManager.passengerGenerator;
         triggerEffectHandler = gameManager.triggerEffectHandler;
+        
+        if (timeText != null)
+        {
+            timeText.text = info.stopsRemaining.ToString();
+        }
+
+        if (coinText != null)
+        {
+            coinText.text = info.coins.ToString();
+        }
+
         startRan = true;
+
+
     }
 
     public void ManualStart()
@@ -94,8 +111,6 @@ public class Passenger : DragObj
             locked = false;
         }
         
-        coinText.text = info.coins.ToString();
-        timeText.text = info.stopsRemaining.ToString();
 
         /*
         if (activeInfoPanel != null)
@@ -145,15 +160,14 @@ public class Passenger : DragObj
     public virtual IEnumerator NextStation()
     {
         yield return new WaitForSeconds(0.5f / gameManager.animationSimSpeed);
-
+        
         yield return StartCoroutine(NextStationAction());
         UpdateStationsRemaining(-1);
-        yield return new WaitForSeconds(0.5f/gameManager.animationSimSpeed);
+        yield return new WaitForSeconds(0.5f / gameManager.animationSimSpeed);
 
-       
-        
         //Debug.Log(info.GetFullName());
     }
+
     public virtual IEnumerator NextStationAction()
     {
         passengerAnimator.NewStationEffectAnim();
@@ -287,7 +301,7 @@ public class Passenger : DragObj
         }
     }
 
-    void SnapTo(SnappingPoint snapPoint)
+    public void SnapTo(SnappingPoint snapPoint)
     {
         transform.parent = snapPoint.transform;
         transform.localPosition = Vector3.zero;
@@ -298,12 +312,14 @@ public class Passenger : DragObj
         snapPoint.occupiedGO = gameObject;
     }
 
-    public bool UpdateStationsRemaining(int amount)
+    public virtual bool UpdateStationsRemaining(int amount)
     {
         
         info.stopsRemaining += amount;
         info.stopsRemaining = Math.Max(0, info.stopsRemaining);
         effectPopup.SpawnPopup(effectsCanvas, amount, SpawnEffectPopup.popupType.time);
+        timeText.text = info.stopsRemaining.ToString();
+
 
         if (ReachedStation())
         {
@@ -313,11 +329,12 @@ public class Passenger : DragObj
         return true;
     }
 
-    public void UpdateCoins(int amount)
+    public virtual void UpdateCoins(int amount)
     {
         info.coins += amount;
-
         effectPopup.SpawnPopup(effectsCanvas, amount, SpawnEffectPopup.popupType.coin);
+        coinText.text = info.coins.ToString();
+
     }
 
     public virtual void Warm()//should trigger the effects manager to gain extra effects

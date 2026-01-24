@@ -9,6 +9,8 @@ public class TriggerEffectHandler : MonoBehaviour
     List<IOnBoardEffect> onboardEffects = new List<IOnBoardEffect>();
     List<IOffBoardEffect> offboardEffects = new List<IOffBoardEffect>();
     List<IOnEnterStationEffect> enterStationEffects = new List<IOnEnterStationEffect>();
+    List<IOnBoneGenEffect> boneGenEffects = new List<IOnBoneGenEffect>();
+    List<IOnMoneyEarntEffect> onMoneyEarntEffects = new List<IOnMoneyEarntEffect>();
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
@@ -43,8 +45,17 @@ public class TriggerEffectHandler : MonoBehaviour
 
             if (monoBehaviour is IOnEnterStationEffect stationEnterEffect)
             {
-
                 enterStationEffects.Add(stationEnterEffect);
+            }
+
+            if (monoBehaviour is IOnBoneGenEffect boneGenEffect)
+            { 
+                boneGenEffects.Add(boneGenEffect);
+            }
+
+            if (monoBehaviour is IOnMoneyEarntEffect onMoneyEarnt)
+            {
+                onMoneyEarntEffects.Add(onMoneyEarnt);
             }
         }
     }
@@ -67,8 +78,17 @@ public class TriggerEffectHandler : MonoBehaviour
 
             if (monoBehaviour is IOnEnterStationEffect stationEnterEffect)
             {
-
                 enterStationEffects.Remove(stationEnterEffect);
+            }
+
+            if (monoBehaviour is IOnBoneGenEffect boneGenEffect)
+            {
+                boneGenEffects.Remove(boneGenEffect);
+            }
+
+            if (monoBehaviour is IOnMoneyEarntEffect onMoneyEarnt)
+            {
+                onMoneyEarntEffects.Remove(onMoneyEarnt);
             }
         }
     }
@@ -103,6 +123,26 @@ public class TriggerEffectHandler : MonoBehaviour
         for (int i = 0; i < enterStationEffects.Count; i++)
         {
             StartCoroutine(enterStationEffects[i].OnEnterStationTrigger());
+        }
+
+        yield return null;
+    }
+
+    public IEnumerator TriggerBoneGen(Seat seat, int boneAmt)
+    {
+        for (int i = 0; i < boneGenEffects.Count; i++)
+        {
+            StartCoroutine(boneGenEffects[i].OnBoneGen(seat, boneAmt));
+        }
+
+        yield return null;
+    }
+
+    public IEnumerator TriggerOnMoneyEarnt(int amt)
+    {
+        for (int i = 0; i < onMoneyEarntEffects.Count; i++)
+        {
+            StartCoroutine(onMoneyEarntEffects[i].OnMoneyEarnt(amt));
         }
 
         yield return null;

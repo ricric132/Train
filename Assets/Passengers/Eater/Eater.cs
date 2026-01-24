@@ -15,7 +15,7 @@ public class Eater : Passenger
         List<Passenger> adjP = new List<Passenger>();
         for (int i = 0; i < adj.Count; i++)
         {
-            if (adj[i].GetPassenger() != null)
+            if (adj[i].GetPassenger() != null && adj[i].GetPassenger() is not StationaryItem)
             {
                 adjP.Add(adj[i].GetPassenger());
             }
@@ -32,7 +32,7 @@ public class Eater : Passenger
 
     public void Eat(Passenger p)
     {
-        Debug.Log("NOM");
+        //Debug.Log("NOM");
         int stationAmt = p.info.stopsRemaining;
         int coinsAmt = p.info.coins;
 

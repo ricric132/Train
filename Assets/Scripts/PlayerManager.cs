@@ -23,6 +23,7 @@ public class PlayerManager : MonoBehaviour
 
     public void AddPositive(int num)
     {
+        StartCoroutine(GameManager.Instance.triggerEffectHandler.TriggerOnMoneyEarnt(num));
         positive += num;
         canvasManager.UpdatePositiveText(positive);
     }

@@ -859,6 +859,7 @@ MonoBehaviour:
   availableIndicator: {fileID: 0}
   contractDisableDuration: 0
   disbledIndicator: {fileID: 0}
+  seatOrder: 0
 --- !u!1 &196219793
 GameObject:
   m_ObjectHideFlags: 0
@@ -2215,7 +2216,7 @@ MonoBehaviour:
   - {fileID: 481246475}
   - {fileID: 207941196}
   clockText: {fileID: 293335978}
-  clockTimer: 1000
+  clockTimer: 0
   clockSpeed: 30
   mouseOverUI: 0
   trainMoveSimSpeed: 1
@@ -2424,6 +2425,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 7d2dafd76e191f342b2296a7f6028bb0, type: 2}
   - {fileID: 11400000, guid: a0dfda9532b141044a78d19741b2e458, type: 2}
   - {fileID: 11400000, guid: c8efb49f1a02e6147a99366acdc7e12b, type: 2}
+  - {fileID: 11400000, guid: 06814b244114c424bb13a0eabdeec0e5, type: 2}
   shopSlots: []
   ShopCanvas: {fileID: 2065169585}
   mapCam: {fileID: 1580325728}
@@ -2794,6 +2796,7 @@ MonoBehaviour:
   availableIndicator: {fileID: 0}
   contractDisableDuration: 0
   disbledIndicator: {fileID: 0}
+  seatOrder: 0
 --- !u!1 &431417557
 GameObject:
   m_ObjectHideFlags: 0
@@ -11155,6 +11158,7 @@ MonoBehaviour:
   availableIndicator: {fileID: 0}
   contractDisableDuration: 0
   disbledIndicator: {fileID: 0}
+  seatOrder: 0
 --- !u!1 &825975623
 GameObject:
   m_ObjectHideFlags: 0
@@ -16669,6 +16673,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a95afb3e91b463645bb1c9a940b175c0, type: 2}
   - {fileID: 11400000, guid: 3c6a7e6b9eeee6a4a9035a4dc506f8db, type: 2}
   - {fileID: 11400000, guid: 33bf546e0cf0e534d901957d72176b86, type: 2}
+  - {fileID: 11400000, guid: eb4928ad9246f344f8780dbd8718172c, type: 2}
+  - {fileID: 11400000, guid: e97308087e6e1384bbe175c5bf400ea9, type: 2}
   passengerList: {fileID: 1580214453}
 --- !u!1 &1592144972
 GameObject:

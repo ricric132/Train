@@ -29,6 +29,11 @@ public class TrainManager : MonoBehaviour
     {
         trainIcon = FindFirstObjectByType<MapTrain>();
         gameManager = GameManager.Instance;
+
+        for(int i = 0; i < seats.Count; i++)
+        {
+            seats[i].seatOrder = (Seat.SeatOrder)(i % 3);
+        }
     }
 
     // Update is called once per frame
@@ -167,7 +172,28 @@ public class TrainManager : MonoBehaviour
 
         return adj;
     }
-    
+
+    public Seat GetSeatAhead(Seat seat, bool sameCar = true)
+    {
+        int seatIndex = seats.IndexOf(seat);
+
+        if ((sameCar && seatIndex%3 == 2) || seatIndex == seats.Count)
+        {
+            return null;
+        }
+        return seats[seatIndex + 1];
+    }
+    public Seat GetSeatBehind(Seat seat, bool sameCar = true)
+    {
+        int seatIndex = seats.IndexOf(seat);
+
+        if ((sameCar && seatIndex % 3 == 0) || seatIndex == 0)
+        {
+            return null;
+        }
+        return seats[seatIndex - 1];
+    }
+
     public List<Seat> GetSameCarSeats(Seat seat)
     {
         List<Seat> res = new List<Seat>();
@@ -197,7 +223,7 @@ public class TrainManager : MonoBehaviour
         return allPassengers[UnityEngine.Random.Range(0, allPassengers.Count)];
     }
 
-    public List<Passenger> GetAllPassengers(int start = 0, int end = 0)
+    public List<Passenger> GetAllPassengers(int start = 0, int end = 0, bool includeItems = false)
     {
         List<Passenger> allPassengers = new List<Passenger>();
         int lastIndex = seats.Count;
@@ -208,9 +234,11 @@ public class TrainManager : MonoBehaviour
 
         for (int i = start; i < lastIndex; i++)
         {
-            if (seats[i].occupiedGO != null)
+            Passenger p = seats[i].GetPassenger();
+            if (p != null && p is not StationaryItem || includeItems == true)
             {
                 allPassengers.Add(seats[i].GetPassenger());
+
             }
         }
 
@@ -219,20 +247,9 @@ public class TrainManager : MonoBehaviour
 
     public List<Passenger> GetAllOtherPassengers(Passenger p, int start = 0, int end = 0)
     {
-        List<Passenger> allPassengers = new List<Passenger>();
-        int lastIndex = seats.Count;
-        if (end > 0)
-        {
-            lastIndex = Mathf.Min(lastIndex, end);
-        }
+        List<Passenger> allPassengers = GetAllPassengers(start, end);
 
-        for (int i = start; i < lastIndex; i++)
-        {
-            if (seats[i].GetPassenger() && seats[i].GetPassenger() != p)
-            {
-                allPassengers.Add(seats[i].GetPassenger());
-            }
-        }
+        allPassengers.Remove(p);
 
         return allPassengers;
     }

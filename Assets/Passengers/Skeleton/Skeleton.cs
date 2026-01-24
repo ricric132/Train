@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Skeleton : Passenger
 {
-    int boneCount = 1;
+    int boneCount = 2;
     public override void OnDepart()
     {
         base.OnDepart();

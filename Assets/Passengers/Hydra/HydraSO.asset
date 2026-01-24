@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac19a542fdd4be84981f537001249848, type: 3}
+  m_Name: HydraSO
+  m_EditorClassIdentifier: 
+  speciesName: Hydra
+  description: "Gain a different effect depending on which seat in car they are in
+    \r\nFront seat - gain +10 gold and -2 stations\r\nMiddle seat - every station
+    give passenger ahead 3 gold or -1 station\r\nBack seat - force eject the passengers
+    ahead, immediately earn 50% of their value \r\n"
+  baseCoins: 5
+  baseStations: 5
+  prefab: {fileID: 8432666971866891856, guid: cbddacd9594e5454182ce444293fc650, type: 3}

@@ -3,15 +3,25 @@ using UnityEngine;
 
 public class Seat : SnappingPoint
 {
+    public enum SeatOrder
+    {
+        Back = 0,
+        Mid = 1,
+        Front = 2
+    }
+
     int boneCount;
 
     public int contractDisableDuration = 0;
 
     [SerializeField] GameObject disbledIndicator;
 
+    public SeatOrder seatOrder;
+
     public override void Start()
     {
         base.Start();
+        
     }
 
     // Update is called once per frame
@@ -64,7 +74,9 @@ public class Seat : SnappingPoint
 
     public void UpdateBones(int amt)
     {
+        StartCoroutine(GameManager.Instance.triggerEffectHandler.TriggerBoneGen(this, amt));
         boneCount += amt;
     }
 
 }
+

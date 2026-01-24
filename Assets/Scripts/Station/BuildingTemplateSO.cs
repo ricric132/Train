@@ -9,7 +9,7 @@ public class BuildingTemplateSO : ScriptableObject
     public int baseCost;
 
     public string buildingName;
-    public string description;
+    [TextArea] public string description;
 
     public GameObject prefab;
     public GameObject mapPrefab;

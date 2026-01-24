@@ -69,14 +69,26 @@ public class DragManager : MonoBehaviour
                 }
             }
         }
-
     }
+
 
     public void UnhighlightAll()
     {
         for (int i = 0; i < snappingpoints.Count; i++)
         {
             snappingpoints[i].StopIndicating();
+        }
+    }
+   
+    //expand this type of thing to every indictor, have everything pass a bool function to this function
+    public void ItemUsableSpots(StationaryItem stationaryItem)
+    {
+        for (int i = 0; i < snappingpoints.Count; i++)
+        {
+            if (stationaryItem.IsUsableTarget(snappingpoints[i]))
+            {
+                snappingpoints[i].ShowIndicator();
+            }
         }
     }
 
