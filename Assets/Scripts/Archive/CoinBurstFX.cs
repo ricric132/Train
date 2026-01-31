@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class CoinBurstFX : MonoBehaviour
 {
-    public int particleCount = 30;
+    public int particleCount = 25;
     ParticleSystem particleSystem;
     ParticleSystem.Particle[] particles;
     Vector3[] startingPos;
