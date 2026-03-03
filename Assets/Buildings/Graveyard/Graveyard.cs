@@ -46,7 +46,7 @@ public class Graveyard : Building, IOnBoneGenEffect, IOnEnterStationEffect, IOff
     }
 
     
-    public IEnumerator OnBoneGen(Seat seat, int boneAmt) { 
+    public IEnumerator OnBoneGen(TrainCar car, int boneAmt) { 
         /*
         if(charges > 0)
         {

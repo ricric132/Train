@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6e1a79d2d9f2464ca23e6cbf58bc42d, type: 3}
+  m_Name: Tim
+  m_EditorClassIdentifier: 
+  name: Tim
+  description: Skelliess
+  flavourText: 22222
+  startingSpecies:
+  - {fileID: 11400000, guid: b5000df5ea7eb884680484bdfeb3d97c, type: 2}
+  - {fileID: 11400000, guid: 925c9715921901941bed54c62ab5f11f, type: 2}
+  - {fileID: 11400000, guid: cca4ca9e78089ef4f9dc356f1de8d2f6, type: 2}
+  - {fileID: 11400000, guid: ec0bb9240a887a4429480bd172b47c4f, type: 2}
+  speciesAmt: 05000000030000000100000001000000
+  startingBuildings:
+  - {fileID: 11400000, guid: b2ba0370e69d64148a8b85cce138f53c, type: 2}
+  - {fileID: 11400000, guid: 061110331af82d545abfdf55dc95bef3, type: 2}
+  - {fileID: 11400000, guid: b2ba0370e69d64148a8b85cce138f53c, type: 2}

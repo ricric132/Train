@@ -31,7 +31,7 @@ public class Passenger : DragObj
     [HideInInspector] public bool stillActive = true;
 
     bool awakeRan = false;
-    bool startRan = false;
+    public bool startRan = false;
 
     public bool partOfPool = false;
 
@@ -213,6 +213,8 @@ public class Passenger : DragObj
         }
         else
         {
+            Vector2 fxPos = gameManager.cameraManager.GetScreenPos(transform.position);
+            gameManager.fxSpawner.SpawnCoinBurst(fxPos, info.coins);
             playerManager.AddPositive(info.coins);
             DestinationReachedEffect();
         }
@@ -259,8 +261,8 @@ public class Passenger : DragObj
 
                 //seat.occupiedGO = null;
                 prevParentSnap.occupiedGO = null;
-                transform.parent = snapPoint.transform;
-                transform.localPosition = Vector3.zero;
+                //transform.parent = snapPoint.transform;
+                //transform.localPosition = Vector3.zero;
                 OnDepart();
             }
             else
@@ -334,18 +336,17 @@ public class Passenger : DragObj
         info.coins += amount;
         effectPopup.SpawnPopup(effectsCanvas, amount, SpawnEffectPopup.popupType.coin);
         coinText.text = info.coins.ToString();
-
     }
 
     public virtual void Warm()//should trigger the effects manager to gain extra effects
     {
-        UpdateCoins(1);
+        //UpdateCoins(1);
     }
 
     public virtual void Chill()
     {
-        UpdateCoins(3);
-        UpdateStationsRemaining(1);
+        //UpdateCoins(3);
+        //UpdateStationsRemaining(1);
     }
 
 }

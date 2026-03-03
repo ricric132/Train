@@ -6,9 +6,17 @@ using NUnit.Framework.Internal.Commands;
 public class LivingEngine : Passenger
 {
     int skipAmount = 1;
+
+    public override void DoSeatedEffect(Seat _seat)
+    {
+        UpdateStationsRemaining(trainManager.GetTrainCar(_seat).GetWarmAmt()); 
+    }
+
+    /*
     public override void Warm()
     {
         base.Warm();
         UpdateStationsRemaining(-skipAmount);
     }
+    */
 }

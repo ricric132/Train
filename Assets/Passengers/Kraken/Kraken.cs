@@ -1,16 +1,24 @@
 using UnityEngine;
+using System.Collections.Generic;
 
-public class Kraken : MonoBehaviour
+public class Kraken : Passenger
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public List<SpeciesSO> spawnableObjects;
+
+    public override void DoSeatedEffect(Seat _seat)
     {
-        
+        base.DoSeatedEffect(_seat);
+
+        List<Seat> adj = trainManager.GetNeighboringSeats(seat);
+
+        for (int i = 0; i < adj.Count; i++)
+        {
+            if (adj[i].GetPassenger() == null && adj[i].CheckActive())
+            {
+                Passenger spawn = passengerGenerator.GenerateCharacter(spawnableObjects[Random.Range(0, spawnableObjects.Count)]);
+                trainManager.AddPassenger(spawn, adj[i]);
+            }
+        }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

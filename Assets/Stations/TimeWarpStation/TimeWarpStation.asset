@@ -22,4 +22,4 @@ MonoBehaviour:
   itemPrefab: {fileID: 2453859669072495849, guid: ed6b3fac31c4b304f88597719eb64bbb, type: 3}
   occupiedSpaces:
   - {x: 0, y: 0}
-  frequency: 0
+  frequency: 1

@@ -8,6 +8,30 @@ public class SkeletonDragon : Passenger
     {
         base.DoSeatedEffect(_seat);
 
+        TrainCar curCar = trainManager.GetTrainCar(_seat);
+
+        while(curCar.GetBoneAmt()>=0)
+        {
+            curCar.UpdateBoneAmt(-1); 
+
+            TrainCar frontCar = trainManager.GetAheadTrainCar(curCar);
+            while (frontCar != null)
+            {
+                frontCar.UpdateWarmAmt(1);
+                frontCar = trainManager.GetAheadTrainCar(frontCar);
+            }
+
+            TrainCar backCar = trainManager.GetAheadTrainCar(curCar);
+            while (backCar != null)
+            {
+                backCar.UpdateChillAmt(1);
+                backCar = trainManager.GetAheadTrainCar(frontCar);
+            }
+        }
+       
+
+        //for(int i = 0; i)
+        /*
         int seatNum = trainManager.seats.IndexOf(_seat);
         List<Passenger> ahead = trainManager.GetAllPassengers(0, seatNum);
         List<Passenger> behind = trainManager.GetAllPassengers(start: seatNum + 1);
@@ -21,5 +45,6 @@ public class SkeletonDragon : Passenger
             randAhead.Warm();
             randBehind.Chill();
         }
+        */
     }
 }

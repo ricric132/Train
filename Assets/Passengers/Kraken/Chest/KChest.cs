@@ -1,21 +1,24 @@
 using UnityEngine;
 using System.Collections;
+using TMPro;
 
 public class KChest : StationaryItem, IOnMoneyEarntEffect
 {
     float gold = 3;
+    [SerializeField] TextMeshProUGUI goldText; 
 
     public override void Start()
     {
         base.Start();
-
         triggerEffectHandler.AddEffect(gameObject);
+        goldText.text = ((int)gold).ToString();
     }
 
     public IEnumerator OnMoneyEarnt(int amt)
     {
         Debug.Log("earnt " + amt);
         gold += amt/10.0f;
+        goldText.text = ((int)gold).ToString();
         yield return null;
     }
 

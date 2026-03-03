@@ -7,13 +7,19 @@ public class Departer : Passenger, IOffBoardEffect
 
     public override void Start()
     {
+        if (startRan)
+        {
+            return;
+        }
         base.Start();
+        //Debug.Log("ADDED");
         triggerEffectHandler.AddEffect(gameObject);
     }
 
 
     public IEnumerator OffBoardTrigger(Passenger p)
     {
+        //Debug.Log("triggered depart");
         if (p.ReachedStation())
         {
             UpdateCoins(2 * offboardBonus);

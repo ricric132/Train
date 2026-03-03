@@ -10,7 +10,7 @@ public class Imp : Passenger
 
     public override void DestinationReachedEffect()
     {
-        Debug.Log("attempt spawn");
+        //Debug.Log("attempt spawn");
         Passenger spawn =  path.GetCurStation().AddPassenger(impSO);
         if (spawn != null)
         {

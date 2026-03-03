@@ -18,17 +18,12 @@ public class SmugglersStation : Station
     }
     public override IEnumerator StationEnter()
     {
-        List<Seat> emptySeats = new List<Seat>();
-        for(int i = 0; i < trainManager.seats.Count; i++)
-        {
-            if (trainManager.seats[i].occupiedGO == null && trainManager.seats[i].CheckActive())
-            {
-                emptySeats.Add(trainManager.seats[i]);
-            }
-        }
 
-        for (int i = 0; i < numPassengers && emptySeats.Count > 0; ++i)
+
+        for (int i = 0; i < numPassengers; ++i)
         {
+            List<Seat> emptySeats = trainManager.GetAvailableSeats();
+
             Passenger curPassenger = passengerGenerator.GenerateCharacterFromPool();
             curPassenger.station = this;
 
