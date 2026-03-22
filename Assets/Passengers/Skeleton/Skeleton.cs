@@ -6,6 +6,6 @@ public class Skeleton : Passenger
     public override void OnDepart()
     {
         base.OnDepart();
-        seat.UpdateBones(1);
+        trainManager.GetTrainCar(seat).UpdateBoneAmt(1);
     }
 }

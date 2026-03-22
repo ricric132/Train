@@ -20,7 +20,6 @@ public class Projectile : MonoBehaviour
         startingPoint = startCam.WorldToScreenPoint(_start);
         transform.position = startingPoint;
         
-
         targetCam = GameManager.Instance.cameraManager.FindObjectCamera(_target.gameObject);
         target = _target;
         totalTime = timeTaken;  

@@ -194,6 +194,7 @@ MonoBehaviour:
   passengerGenerator: {fileID: 0}
   triggerEffectHandler: {fileID: 0}
   stillActive: 1
+  startRan: 0
   partOfPool: 0
   passengerAnimator: {fileID: 0}
 --- !u!114 &7298023728772516483

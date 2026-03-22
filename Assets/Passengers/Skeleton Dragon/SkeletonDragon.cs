@@ -10,10 +10,8 @@ public class SkeletonDragon : Passenger
 
         TrainCar curCar = trainManager.GetTrainCar(_seat);
 
-        while(curCar.GetBoneAmt()>=0)
+        for(int i = 0; i < curCar.GetBoneAmt(); i++)
         {
-            curCar.UpdateBoneAmt(-1); 
-
             TrainCar frontCar = trainManager.GetAheadTrainCar(curCar);
             while (frontCar != null)
             {
@@ -21,14 +19,17 @@ public class SkeletonDragon : Passenger
                 frontCar = trainManager.GetAheadTrainCar(frontCar);
             }
 
-            TrainCar backCar = trainManager.GetAheadTrainCar(curCar);
+
+            TrainCar backCar = trainManager.GetBehindTrainCar(curCar);
             while (backCar != null)
             {
                 backCar.UpdateChillAmt(1);
-                backCar = trainManager.GetAheadTrainCar(frontCar);
+                backCar = trainManager.GetBehindTrainCar(frontCar);
             }
         }
-       
+
+        curCar.UpdateBoneAmt(-curCar.GetBoneAmt());
+
 
         //for(int i = 0; i)
         /*

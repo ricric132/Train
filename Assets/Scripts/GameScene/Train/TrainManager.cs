@@ -298,7 +298,7 @@ public class TrainManager : MonoBehaviour
 
     public TrainCar GetAheadTrainCar(TrainCar car)
     {
-        if(trainCars.IndexOf(car) == trainCars.Count - 1)
+        if(trainCars.IndexOf(car) >= trainCars.Count - 1 || trainCars.IndexOf(car) == -1)
         {
             return null;
         }
@@ -306,14 +306,36 @@ public class TrainManager : MonoBehaviour
         return trainCars[trainCars.IndexOf(car) + 1];
     }
 
+    public List<TrainCar> GetAllAheadTrainCars(TrainCar car)
+    {
+        List<TrainCar> carsInfront = new List<TrainCar>();
+        for (int i = trainCars.IndexOf(car)+1; i < trainCars.Count; i++)
+        {
+            carsInfront.Add(trainCars[i]);
+        }
+
+        return carsInfront;
+    }
+
     public TrainCar GetBehindTrainCar(TrainCar car)
     {
-        if (trainCars.IndexOf(car) == 0)
+        if (trainCars.IndexOf(car) == 0 || trainCars.IndexOf(car) == -1)
         {
             return null;
         }
 
         return trainCars[trainCars.IndexOf(car) - 1];
+    }
+
+    public List<TrainCar> GetAllBehindTrainCars(TrainCar car)
+    {
+        List<TrainCar> carsBehind = new List<TrainCar>();
+        for (int i = trainCars.IndexOf(car) - 1; i >= 0; i--)
+        {
+            carsBehind.Add(trainCars[i]);
+        }
+
+        return carsBehind;
     }
 
     public List<Seat> GetSeatsInCar(TrainCar car)
