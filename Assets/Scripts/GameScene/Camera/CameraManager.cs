@@ -129,8 +129,8 @@ public class CameraManager : MonoBehaviour
         }
 
         //Debug.Log(Input.mouseScrollDelta.y);
-        targetOffset = Mathf.Clamp(targetOffset - Input.mouseScrollDelta.y * Time.deltaTime * scrollSpeed, -20, 20);
-        baseCamOffset = new Vector3(baseCamOffset.x, Mathf.Lerp(baseCamOffset.y, targetOffset, Mathf.Clamp(scrollTime/lerpDuration, 0, 1)), -10);
+        targetOffset = Mathf.Clamp(targetOffset - Input.mouseScrollDelta.y * Time.deltaTime * scrollSpeed, -40, 40);
+        baseCamOffset = new Vector3(Mathf.Lerp(baseCamOffset.x, targetOffset, Mathf.Clamp(scrollTime/lerpDuration, 0, 1)), baseCamOffset.y, -10);
         baseCam.transform.position = baseCamCentre.position + baseCamOffset;
     }
 

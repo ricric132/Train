@@ -24,7 +24,7 @@ public class BGScroller : MonoBehaviour
             curOffset += scrollSpeed * Time.deltaTime;
             for (int i = 0; i < trackTiles.Count; i++)
             {
-                trackTiles[i].localPosition = new Vector3(0, -((curOffset + (i * tileSpacing)) % bottemCullingPoint), 0);
+                trackTiles[i].localPosition = new Vector3(0, (curOffset + (i * tileSpacing)) % bottemCullingPoint, 0);
             }
         }
     }

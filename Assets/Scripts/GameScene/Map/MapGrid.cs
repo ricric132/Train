@@ -1,11 +1,13 @@
 using System.Collections.Generic;
+using System.Runtime.ConstrainedExecution;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class MapGrid : MonoBehaviour
 {
-    const int width = 17;
-    const int height = 15;
+    const int width = 20;
+    const int height = 5;
 
     const int cornerZoneMax = 6;
     const int cornerZoneMin = 3;
@@ -56,7 +58,7 @@ public class MapGrid : MonoBehaviour
                 grid[i, j] = new MapTile(i, j);
             }
         }
-        
+
         /*
         for (int i = 0; i < grid.GetLength(0); i++)
         {
@@ -76,9 +78,9 @@ public class MapGrid : MonoBehaviour
         //CellularAutomataGenerate(grid, generationSteps);
         //RandomWalkGeneration();
 
-        SectionedGeneration();
-        ReorderTracks();
-        
+
+
+
         /*
 
         for (int i = 0; i < grid.GetLength(0); i++)
@@ -98,9 +100,14 @@ public class MapGrid : MonoBehaviour
             }
         }
         */
-
+        /*
+        SectionedGeneration();
+        ReorderTracks();
+        */
+        LineGeneration(1, 1);
         PlaceStartingStations();
         PlaceStartingTile();
+        
     }
 
     // Update is called once per frame
@@ -166,6 +173,16 @@ public class MapGrid : MonoBehaviour
         line.positionCount = vertices.Length;
         line.SetPositions(vertices);
         return o;
+    }
+
+    void LineGeneration(int startingStations, int maxWidth)
+    {
+        for (int i = 0; i < grid.GetLength(0); i++)
+        {
+            grid[i, 3].track = true;
+            trainTrack.Add(new Vector2Int(i, 3));
+            grid[i, 3].go = Instantiate(hTrackTilePrefab, GridCoordToWorldPos(i, 3), Quaternion.identity);
+        }
     }
 
     void SectionedGeneration()

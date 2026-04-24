@@ -61,9 +61,17 @@ public class TrainManager : MonoBehaviour
     public IEnumerator SimulateLeaveStation()
     {
         //Debug.Log("GOOO");
+        /*
         while (Mathf.Abs(trainFront.position.y - rightStop.position.y) > 0.1 && trainFront.position.y < rightStop.position.y)
         {
             trainFront.position = new Vector3(trainFront.position.x, driveSpeed * Time.deltaTime * gameManager.animationSimSpeed + trainFront.position.y, trainFront.position.z);
+            yield return new WaitForEndOfFrame();
+        }
+        */
+
+        while (Mathf.Abs(trainFront.position.x - rightStop.position.x) > 0.1 && trainFront.position.x < rightStop.position.x)
+        {
+            trainFront.position = new Vector3(driveSpeed * Time.deltaTime * gameManager.animationSimSpeed + trainFront.position.x, trainFront.position.y, trainFront.position.z);
             yield return new WaitForEndOfFrame();
         }
         stopped = false;
@@ -72,11 +80,21 @@ public class TrainManager : MonoBehaviour
 
     public IEnumerator SimulateEnterStation()
     {
+        /*
         trainFront.position = new Vector2(trainFront.position.x, leftStop.position.y);
-
+        
         while (Mathf.Abs(trainFront.position.y - stationStop.position.y) > 0.1 && trainFront.position.y < stationStop.position.y)
         {
             trainFront.position = new Vector3(trainFront.position.x, driveSpeed * Time.deltaTime * gameManager.animationSimSpeed + trainFront.position.y, trainFront.position.z);
+            yield return new WaitForEndOfFrame();
+        }
+        */
+
+        trainFront.position = new Vector2(leftStop.position.x, trainFront.position.y);
+
+        while (Mathf.Abs(trainFront.position.x - stationStop.position.x) > 0.1 && trainFront.position.x < stationStop.position.x)
+        {
+            trainFront.position = new Vector3(driveSpeed * Time.deltaTime * gameManager.animationSimSpeed + trainFront.position.x, trainFront.position.y, trainFront.position.z);
             yield return new WaitForEndOfFrame();
         }
 
