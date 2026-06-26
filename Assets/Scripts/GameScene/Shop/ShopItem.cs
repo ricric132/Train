@@ -2,8 +2,114 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+public class ShopItem : MonoBehaviour
+{
+
+    Rotation rotation;
+    bool isDragging;
+    Vector3 dragOffset;
+    Vector3 originalPosition;
+    public MapGrid map;
+
+    public List<Vector2> occupied;
+
+    public Camera cam;
+
+    public BuildingTemplateSO templateSO;
+
+    public GameObject itemVisual;
+    public GameObject mapVisual;
+
+    public ShopSlot slot;
+
+    public GameObject mapObject; 
+
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    public virtual void Start()
+    {
+        mapVisual.SetActive(false);
+        itemVisual.SetActive(true);
+        map = FindFirstObjectByType<MapGrid>();
+    }
+
+    // Update is called once per frame
+    public virtual void Update()
+    {
+        if (isDragging)
+        {
+            slot.infoPanel.Close();
+            transform.position = cam.WorldToScreenPoint(SnapToGrid(cam.ScreenToWorldPoint(Input.mousePosition)));
+        }
+    }
+
+    public bool OnMap()
+    {
+        Vector2 mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
+        Collider2D[] hit = Physics2D.OverlapPointAll(mousePos);
+        if (hit != null)
+        {
+            foreach (Collider2D col in hit)
+            {
+                if (col.gameObject == mapObject)
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public void OnMouseDown()
+    {
+        isDragging = true;
+        dragOffset = transform.position - Input.mousePosition;
+    }
+
+    public virtual void OnMouseUp()
+    {
+        if (!isDragging)
+        {
+            return;
+        }
+
+        isDragging = false;
+
+    }
+
+    void FindActiveCam()
+    {
+
+    }
+
+    Vector3 GetMousePos()
+    {
+        return new Vector2(cam.ScreenToWorldPoint(Input.mousePosition).x, cam.ScreenToWorldPoint(Input.mousePosition).y);
+    }
+
+    Vector2 SnapToGrid(Vector3 pos)
+    {
+        Vector2Int coords = map.WorldPosToGridCoord(pos.x, pos.y);
+        return map.GridCoordToWorldPos(coords.x, coords.y, true);
+    }
+
+    public void OnMouseEnter()
+    {
+        slot.infoPanel.Open();
+        slot.infoPanel.SetUp(templateSO);
+    }
+
+    public void OnMouseExit()
+    {
+        slot.infoPanel.Close();
+    }
+}
+
+
+/* canvas 
 public class ShopItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
 {
+
     Rotation rotation;
     bool isDragging;
     Vector3 dragOffset;
@@ -99,3 +205,4 @@ public class ShopItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         slot.infoPanel.Close();
     }
 }
+*/

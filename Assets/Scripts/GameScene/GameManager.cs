@@ -185,7 +185,10 @@ public class GameManager : MonoBehaviour
             state = prevState;
         }
 
-        canvasManager.SetCanvasMode(state);
+        
+        shopManager.toggle(state == GameState.ShopMenu);
+
+        //canvasManager.SetCanvasMode(state);
     }
     public void ToggleContractMenu()
     {

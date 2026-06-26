@@ -16,7 +16,7 @@ public class MapGrid : MonoBehaviour
 
     //map info
     public MapTile[,] grid = new MapTile[width, height];
-    float tileSize = 5;
+    float tileSize = 1;
     [SerializeField] Transform origin;
     int generationSteps = 8;
     int startingStations = 3;
@@ -119,6 +119,7 @@ public class MapGrid : MonoBehaviour
     public void Build(Vector2Int coords, Rotation rotation, BuildingTemplateSO template)
     {
         GameObject build = Instantiate(template.mapPrefab, GridCoordToWorldPos(coords.x, coords.y), Quaternion.identity);
+        build.transform.parent = transform;
 
         for(int i = 0; i < template.occupiedSpaces.Count; i++)
         {
@@ -179,9 +180,11 @@ public class MapGrid : MonoBehaviour
     {
         for (int i = 0; i < grid.GetLength(0); i++)
         {
-            grid[i, 3].track = true;
-            trainTrack.Add(new Vector2Int(i, 3));
-            grid[i, 3].go = Instantiate(hTrackTilePrefab, GridCoordToWorldPos(i, 3), Quaternion.identity);
+            grid[i, 2].track = true;
+            trainTrack.Add(new Vector2Int(i, 2));
+            grid[i, 2].go = Instantiate(hTrackTilePrefab, GridCoordToWorldPos(i, 2), Quaternion.identity);
+            grid[i, 2].go.transform.parent = transform;
+
         }
     }
 
@@ -306,6 +309,7 @@ public class MapGrid : MonoBehaviour
 
                 grid[rand.x, rand.y].go = Instantiate(randStation.mapPrefab, GridCoordToWorldPos(rand.x, rand.y), Quaternion.identity);
                 grid[rand.x, rand.y].go.GetComponent<StationTile>().station = stationPath.AddStation(randStation);
+                grid[rand.x, rand.y].go.transform.parent = transform;
             }
         }
         else
@@ -325,6 +329,7 @@ public class MapGrid : MonoBehaviour
 
                 grid[rand.x, rand.y].go = Instantiate(randStation.mapPrefab, GridCoordToWorldPos(rand.x, rand.y), Quaternion.identity);
                 grid[rand.x, rand.y].go.GetComponent<StationTile>().station = stationPath.AddStation(randStation);
+                grid[rand.x, rand.y].go.transform.parent = transform;
             }
         }
     }

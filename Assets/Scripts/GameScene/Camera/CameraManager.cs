@@ -70,7 +70,8 @@ public class CameraManager : MonoBehaviour
         switch (camState)
         {
             case CamState.train:
-                UpdateTrainCam();
+                baseCam.transform.position = baseCamCentre.position + new Vector3(0, 0, -10);
+                //UpdateTrainCam();
                 break;
 
             case CamState.seatPan:

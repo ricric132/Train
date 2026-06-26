@@ -23,6 +23,63 @@ public class ShopSlot : MonoBehaviour
 
     void Update()
     {
+
+    }
+
+    public void RandomizeItem()
+    {
+        if (curItem && curItem.gameObject)
+        {
+            Destroy(curItem.gameObject);
+            curItem = null;
+        }
+
+        if (shopManager == null)
+        {
+            Debug.Log("no shop");
+        }
+
+        ShopItem item = shopManager.GetRandomItem();
+        item.slot = this;
+        curItem = item;
+        item.gameObject.transform.parent = itemParent;
+        item.gameObject.transform.localPosition = Vector3.zero;
+        item.gameObject.transform.localScale = Vector3.one;
+
+        UpdateText();
+    }
+
+    void UpdateText()
+    {
+        costText.text = shopManager.GetCost(curItem.templateSO).ToString();
+        nameText.text = curItem.templateSO.buildingName;
+    }
+}
+
+
+/* Canvas Implementation 
+public class ShopSlot : MonoBehaviour
+{
+    public ShopManager shopManager;
+    ShopItem curItem;
+
+    [SerializeField] TextMeshProUGUI nameText;
+    [SerializeField] TextMeshProUGUI costText;
+
+    public ShopItemInfoPanel infoPanel;
+
+    [SerializeField] Transform itemParent;
+
+    void Awake()
+    {
+        
+        //shopManager = FindFirstObjectByType<ShopManager>();
+        //shopManager.shopSlots.Add(this);   
+        
+    }
+
+    void Update()
+    {
         
     }
 
@@ -55,5 +112,5 @@ public class ShopSlot : MonoBehaviour
         nameText.text = curItem.templateSO.buildingName;
     }
 
-
 }
+*/
