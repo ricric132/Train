@@ -15,7 +15,10 @@ public class ShopManager : MonoBehaviour
     public GameObject slotsParents;
     public List<ShopSlot> shopSlots;
 
+    public GameObject mapPanel;
+
     public GameObject ShopCanvas;
+    public Camera baseCam;
     public Camera mapCam;
 
     [SerializeField] TextMeshProUGUI moneyTextInShop;
@@ -126,7 +129,8 @@ public class ShopManager : MonoBehaviour
         GameObject go = Instantiate(template.itemPrefab);
         //do some manipulations to it eg change price
         go.GetComponent<ShopItem>().templateSO = template;
-        go.GetComponent<ShopItem>().cam = mapCam;
+        go.GetComponent<ShopItem>().cam = baseCam;
+        go.GetComponent<ShopItem>().mapObject = mapPanel;
 
         return go.GetComponent<ShopItem>();
     }

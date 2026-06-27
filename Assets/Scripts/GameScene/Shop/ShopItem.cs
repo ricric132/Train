@@ -38,7 +38,7 @@ public class ShopItem : MonoBehaviour
         if (isDragging)
         {
             slot.infoPanel.Close();
-            transform.position = cam.WorldToScreenPoint(SnapToGrid(cam.ScreenToWorldPoint(Input.mousePosition)));
+            transform.position = SnapToGrid(cam.ScreenToWorldPoint(Input.mousePosition));
         }
     }
 
@@ -52,18 +52,19 @@ public class ShopItem : MonoBehaviour
             {
                 if (col.gameObject == mapObject)
                 {
+                    //Debug.Log("OnMap");
                     return true;
                 }
             }
         }
-
+        //Debug.Log("OffMap");
         return false;
     }
 
     public void OnMouseDown()
     {
         isDragging = true;
-        dragOffset = transform.position - Input.mousePosition;
+        dragOffset = transform.position - cam.ScreenToWorldPoint(Input.mousePosition);
     }
 
     public virtual void OnMouseUp()

@@ -23,9 +23,12 @@ public class BuildableItem : ShopItem
     public override void Update()
     {
         base.Update();
-
+        
         if (OnMap())
         {
+            itemVisual.SetActive(false);
+            mapVisual.SetActive(true);
+
             if (IsValidBuildSpot())
             {
                 mapVisualValid.SetActive(true);
@@ -37,13 +40,18 @@ public class BuildableItem : ShopItem
                 mapVisualInvalid.SetActive(true);
             }
         }
+        else
+        {
+            itemVisual.SetActive(true);
+            mapVisual.SetActive(false);
+        }
+        
     }
 
 
     bool IsValidBuildSpot()
     {
-        Vector2 worldPos = cam.ScreenToWorldPoint(transform.position);
-        Vector2Int coords = map.WorldPosToGridCoord(worldPos.x, worldPos.y);
+        Vector2Int coords = map.WorldPosToGridCoord(transform.position.x, transform.position.y);
 
         if (coords.x < 0 || coords.x >= map.grid.GetLength(0))
         {
@@ -59,6 +67,7 @@ public class BuildableItem : ShopItem
             //Debug.Log(coords.x + ", " + coords.y);
             if (buildRules[i] && buildRules[i].Check(map.grid, new Vector2Int(coords.x, coords.y)) == false)
             {
+                Debug.Log("Failed Build Rule");
                 return false;
             }
         }
@@ -73,8 +82,7 @@ public class BuildableItem : ShopItem
         if (OnMap() && CheckBuild())
         {
             slot.shopManager.Buy(this);
-            Vector2 worldPos = cam.ScreenToWorldPoint(transform.position);
-            Vector2Int coords = map.WorldPosToGridCoord(worldPos.x, worldPos.y);
+            Vector2Int coords = map.WorldPosToGridCoord(transform.position.x, transform.position.y);
 
             Build(coords);
         }
@@ -92,7 +100,6 @@ public class BuildableItem : ShopItem
         if (!IsValidBuildSpot())
         {
             slot.shopManager.InvalidActionPopup("Cannot build this building there");
-            //textPopup
             return false;
         }
 
