@@ -6,7 +6,7 @@ public class ShopItem : MonoBehaviour
 {
 
     Rotation rotation;
-    bool isDragging;
+    public bool isDragging;
     Vector3 dragOffset;
     Vector3 originalPosition;
     public MapGrid map;

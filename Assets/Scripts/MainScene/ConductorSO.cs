@@ -12,4 +12,5 @@ public class ConductorSO : ScriptableObject
     public List<int> speciesAmt;
 
     public List<BuildingTemplateSO> startingBuildings;
+    public int maxStations;
 }

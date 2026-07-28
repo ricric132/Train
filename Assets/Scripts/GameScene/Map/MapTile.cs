@@ -8,7 +8,10 @@ public class MapTile : MonoBehaviour
     public bool track;
     public bool empty;
     public bool loopStart;
-    public GameObject go;
+
+    public GameObject builtObject;
+    public TerrainType terrain;
+    public GameObject terrainObject;
 
     public MapTile(int _x, int _y)
     {
@@ -21,10 +24,10 @@ public class MapTile : MonoBehaviour
 
     public Station GetStation()
     {
-        if (go && go.tag == "Station")
+        if (builtObject && builtObject.tag == "Station")
         {
            // Debug.Log(go);
-            return go.GetComponent<StationTile>().station;
+            return builtObject.GetComponent<StationTile>().station;
         }
 
         return null;
@@ -32,13 +35,20 @@ public class MapTile : MonoBehaviour
 
     public string GetTag()
     {
-        if (go)
+        if (builtObject)
         {
-            return go.tag;
+            return builtObject.tag;
         }
 
         return null;
     }
 }
 
+public enum TerrainType
+{
+    none, 
+    grass,
+    mountain,
+    water
+}
 

@@ -1,13 +1,17 @@
 using System.Collections.Generic;
 using System.Runtime.ConstrainedExecution;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.XR;
 
 public class MapGrid : MonoBehaviour
 {
     const int width = 20;
     const int height = 5;
+
+    int stationDistance = 3;
 
     const int cornerZoneMax = 6;
     const int cornerZoneMin = 3;
@@ -37,15 +41,15 @@ public class MapGrid : MonoBehaviour
 
     public List<Vector2Int> trainTrack = new List<Vector2Int>();
 
-    MapGen mapGen;
-
     StationPath stationPath;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    [SerializeField] Transform visualParent;
+    [SerializeField] Transform buildingParent;
+    [SerializeField] Transform terrainParent;
+
     void Start()
     {
         stationPath = FindFirstObjectByType<StationPath>();
-        mapGen = GetComponent<MapGen>();
         SetUpGrid();
     }
 
@@ -59,72 +63,21 @@ public class MapGrid : MonoBehaviour
             }
         }
 
-        /*
-        for (int i = 0; i < grid.GetLength(0); i++)
-        {
-            Vector3 startPoint = new Vector3(0, i * tileSize, 0) + transform.position;
-            Vector3 endPoint = new Vector3(grid.GetLength(1) * tileSize, i * tileSize, 0) + transform.position;
-            MakeLine(new Vector3[] { startPoint, endPoint}); 
-        }
-
-        for (int j = 0; j < grid.GetLength(1); j++)
-        {
-            Vector3 startPoint = new Vector3(j * tileSize, 0, 0) + transform.position;
-            Vector3 endPoint = new Vector3(j * tileSize, grid.GetLength(0) * tileSize, 0) + transform.position;
-            MakeLine(new Vector3[] { startPoint, endPoint });
-        }
-        */
-
-        //CellularAutomataGenerate(grid, generationSteps);
-        //RandomWalkGeneration();
-
-
-
-
-        /*
-
-        for (int i = 0; i < grid.GetLength(0); i++)
-        {
-            for (int j = 0; j < grid.GetLength(1); j++)
-            {
-                MapTile cur = grid[i, j];
-
-                if (cur.track) //inside for cellular empty for paths
-                {
-                    cur.go = Instantiate(trackTilePrefab, GridCoordToWorldPos(cur.x, cur.y), Quaternion.identity);
-                }
-                else
-                {
-                    //cur.go = Instantiate(mapTilePrefabOut, GridCoordToWorldPos(cur.x, cur.y), Quaternion.identity);
-                }
-            }
-        }
-        */
-        /*
-        SectionedGeneration();
-        ReorderTracks();
-        */
-        LineGeneration(1, 1);
-        PlaceStartingStations();
+        GenerateLandscape();
+        GeneratePath();
         PlaceStartingTile();
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
         
     }
 
     public void Build(Vector2Int coords, Rotation rotation, BuildingTemplateSO template)
     {
         GameObject build = Instantiate(template.mapPrefab, GridCoordToWorldPos(coords.x, coords.y), Quaternion.identity);
-        build.transform.parent = transform;
+        build.transform.parent = buildingParent;
 
         for(int i = 0; i < template.occupiedSpaces.Count; i++)
         {
             Vector2Int offset = template.occupiedSpaces[i];
-            grid[coords.x + offset.x, coords.y + offset.y].go = build;
+            grid[coords.x + offset.x, coords.y + offset.y].builtObject = build;
             grid[coords.x + offset.x, coords.y + offset.y].empty = false;
         }
 
@@ -162,46 +115,178 @@ public class MapGrid : MonoBehaviour
         return new Vector2Int((int)(relativeToOrigin.x/tileSize), (int)(relativeToOrigin.y/tileSize));
     }
 
-    private GameObject MakeLine(Vector3[] vertices)
+    void GenerateLandscape()
     {
-        GameObject o = new GameObject();
-        LineRenderer line = o.AddComponent<LineRenderer>().GetComponent<LineRenderer>();
-        Shader shader = Shader.Find("Hidden/Internal-Colored");
-        Material mat = new Material(shader) { color = new Color(0, 0, 0, 0.5f) };
-        line.material = mat;
-        line.startWidth = 0.5f;
-        line.endWidth = 0.5f;
-        line.positionCount = vertices.Length;
-        line.SetPositions(vertices);
-        return o;
-    }
-
-    void LineGeneration(int startingStations, int maxWidth)
-    {
-        for (int i = 0; i < grid.GetLength(0); i++)
+        //heightmap based
+        Vector2 origin = new Vector2(Random.value, Random.value);
+        float stepSize = 0.01f;
+        for(int i = 0; i < grid.GetLength(0); i++)
         {
-            grid[i, 2].track = true;
-            trainTrack.Add(new Vector2Int(i, 2));
-            grid[i, 2].go = Instantiate(hTrackTilePrefab, GridCoordToWorldPos(i, 2), Quaternion.identity);
-            grid[i, 2].go.transform.parent = transform;
-
-        }
-    }
-
-    void SectionedGeneration()
-    {
-        GenGridTile[,] gen = mapGen.GenTrackErosionMap((width - borderSize * 2) / 3, (height - borderSize * 2) / 3, generationSteps); //generates a grid to be upscaled and offset
-        for (int i = 0; i < gen.GetLength(0); i++)
-        {
-            for (int j = 0; j < gen.GetLength(1); j++)
+            for (int j = 0; j < grid.GetLength(1); j++)
             {
-                if (gen[i, j].inside)
+                float value = Mathf.PerlinNoise(i * stepSize + origin.x, j * stepSize + origin.y);
+
+                if(value < 0.3)
                 {
-                    GenTracksOnTile(gen, i, j);
+                    //water
+                }
+                else if(value < 0.8)
+                {
+                    //grass
+                }
+                else
+                {
+                    //mountain
                 }
             }
         }
     }
+
+    void SetTerrain(Vector2Int coords, TerrainType terrainType)
+    {
+
+    }
+
+
+    void GeneratePath()
+    {
+        if (RunBuffData.selectedConductor == null)
+        { 
+            Vector2Int prevCoords = new Vector2Int(0, 0);
+            Vector2Int coords = new Vector2Int(0, 0);
+
+            coords.y = Random.Range(0, height);
+            BuildingTemplateSO randStation = GameManager.Instance.stationPath.GetRandomStation();
+            prevCoords = coords;
+
+
+            Build(coords, Rotation.right, randStation);
+
+            for (int i = 1; i < 3; i++)
+            {
+                coords.x = 1 + i * stationDistance + Random.Range(0, stationDistance);
+                coords.y = Random.Range(0, height);
+
+                randStation = GameManager.Instance.stationPath.GetRandomStation();
+
+                Build(coords, Rotation.right, randStation);
+
+                List<Vector2Int> path = ConnectPoints(prevCoords, coords - new Vector2Int(1, 0));
+                path.Add(coords);
+                BuildTrackPath(path);
+
+                prevCoords = coords;
+            }
+
+        }
+        else
+        {
+            stationDistance = 20 / RunBuffData.selectedConductor.maxStations;
+            for (int i = 0; i < RunBuffData.selectedConductor.startingBuildings.Count; i++)
+            {
+            }
+        }
+    }
+
+    List<Vector2Int> ConnectPoints(Vector2Int start, Vector2Int end)
+    {
+        List<Vector2Int> path = new List<Vector2Int>();
+
+        int direction = 0;
+        Vector2Int cur = start;
+        path.Add(cur); 
+
+        while (cur != end) 
+        { 
+            if(direction%2 == 0 && cur.x != end.x)
+            {
+                int step = Random.Range(1, end.x - cur.x + 1);
+                for(int i = 0; i < step; i++)
+                {
+                    cur.x += 1;
+                    path.Add(cur);
+                }
+
+            }
+            else if (cur.y != end.y)
+            {
+                int step = Random.Range(1, Mathf.Abs(end.y - cur.y) + 1);
+                for (int i = 0; i < step; i++)
+                {
+                    cur.y += (end.y - cur.y)/Mathf.Max(Mathf.Abs(end.y - cur.y), 1);
+                    path.Add(cur);
+                }
+            }
+
+            direction++;
+        }
+
+        return path;
+    }
+
+    void BuildTrackPath(List<Vector2Int> path)
+    {
+
+        Vector2Int enterDir;
+        Vector2Int exitDir;
+        for (int i = 0; i < path.Count; i++)
+        {
+            Debug.Log("place track");
+            Vector2Int cur = path[i];
+            trainTrack.Add(cur);
+
+            if (i > 0)
+            {
+                enterDir = path[i - 1] - cur;
+            }
+            else
+            {
+                enterDir = new Vector2Int(-1, 0);
+            }
+
+            if (i < path.Count - 1)
+            {
+                exitDir = path[i+1] - cur;
+            }
+            else
+            {
+                exitDir = new Vector2Int(1, 0);
+            }
+
+            if (exitDir.x == 0 && enterDir.x == 0)
+            {
+                grid[cur.x, cur.y].builtObject = Instantiate(vTrackTilePrefab, GridCoordToWorldPos(cur.x, cur.y), Quaternion.identity);
+                grid[cur.x, cur.y].builtObject.transform.parent = buildingParent;
+            }
+            else if (exitDir.y == 0 && enterDir.y == 0)
+            {
+                grid[cur.x, cur.y].builtObject = Instantiate(hTrackTilePrefab, GridCoordToWorldPos(cur.x, cur.y), Quaternion.identity);
+                grid[cur.x, cur.y].builtObject.transform.parent = buildingParent;
+            }
+            else if (enterDir + exitDir == new Vector2Int(1, -1))
+            { 
+                grid[cur.x, cur.y].builtObject = Instantiate(tlTrackTilePrefab, GridCoordToWorldPos(cur.x, cur.y), Quaternion.identity);
+                grid[cur.x, cur.y].builtObject.transform.parent = buildingParent;
+            }
+            else if (enterDir + exitDir == new Vector2Int(-1, -1))
+            {
+                grid[cur.x, cur.y].builtObject = Instantiate(trTrackTilePrefab, GridCoordToWorldPos(cur.x, cur.y), Quaternion.identity);
+                grid[cur.x, cur.y].builtObject.transform.parent = buildingParent;
+
+            }
+            else if (enterDir + exitDir == new Vector2Int(-1, 1))
+            {
+                grid[cur.x, cur.y].builtObject = Instantiate(brTrackTilePrefab, GridCoordToWorldPos(cur.x, cur.y), Quaternion.identity);
+                grid[cur.x, cur.y].builtObject.transform.parent = buildingParent;
+            }
+            else
+            {
+                grid[cur.x, cur.y].builtObject = Instantiate(blTrackTilePrefab, GridCoordToWorldPos(cur.x, cur.y), Quaternion.identity);
+                grid[cur.x, cur.y].builtObject.transform.parent = buildingParent;
+            }
+        }
+    }
+
 
     void GenTracksOnTile(GenGridTile[,] gen, int x, int y)
     {
@@ -223,7 +308,7 @@ public class MapGrid : MonoBehaviour
         //grid[x * 3, y * 3].track = true;
     }
 
-    void ReorderTracks()
+    void OrientateTracks()
     {
         Vector2Int enterDir = Vector2Int.zero;
         Vector2Int exitDir = Vector2Int.zero;
@@ -253,32 +338,31 @@ public class MapGrid : MonoBehaviour
 
                         if (exitDir.x == 0 && enterDir.x == 0)
                         {
-                            grid[cur.x, cur.y].go = Instantiate(vTrackTilePrefab, GridCoordToWorldPos(cur.x, cur.y), Quaternion.identity);
+                            grid[cur.x, cur.y].builtObject = Instantiate(vTrackTilePrefab, GridCoordToWorldPos(cur.x, cur.y), Quaternion.identity);
                         }
                         else if (exitDir.y == 0 && enterDir.y == 0)
                         {
-                            grid[cur.x, cur.y].go = Instantiate(hTrackTilePrefab, GridCoordToWorldPos(cur.x, cur.y), Quaternion.identity);
+                            grid[cur.x, cur.y].builtObject = Instantiate(hTrackTilePrefab, GridCoordToWorldPos(cur.x, cur.y), Quaternion.identity);
                         }
                         else if (enterDir + exitDir == new Vector2Int(1, -1))
                         {
 
-                            grid[cur.x, cur.y].go = Instantiate(tlTrackTilePrefab, GridCoordToWorldPos(cur.x, cur.y), Quaternion.identity);
+                            grid[cur.x, cur.y].builtObject = Instantiate(tlTrackTilePrefab, GridCoordToWorldPos(cur.x, cur.y), Quaternion.identity);
                             
                         }
                         else if (enterDir + exitDir == new Vector2Int(-1, -1))
                         {
-                            grid[cur.x, cur.y].go = Instantiate(trTrackTilePrefab, GridCoordToWorldPos(cur.x, cur.y), Quaternion.identity);
+                            grid[cur.x, cur.y].builtObject = Instantiate(trTrackTilePrefab, GridCoordToWorldPos(cur.x, cur.y), Quaternion.identity);
 
                         }
                         else if (enterDir + exitDir == new Vector2Int(-1, 1))
                         {
-                            grid[cur.x, cur.y].go = Instantiate(brTrackTilePrefab, GridCoordToWorldPos(cur.x, cur.y), Quaternion.identity);
+                            grid[cur.x, cur.y].builtObject = Instantiate(brTrackTilePrefab, GridCoordToWorldPos(cur.x, cur.y), Quaternion.identity);
 
                         }
                         else
                         {
-                            grid[cur.x, cur.y].go = Instantiate(blTrackTilePrefab, GridCoordToWorldPos(cur.x, cur.y), Quaternion.identity);
-                            
+                            grid[cur.x, cur.y].builtObject = Instantiate(blTrackTilePrefab, GridCoordToWorldPos(cur.x, cur.y), Quaternion.identity);  
                         }
                     }
                 }
@@ -296,6 +380,39 @@ public class MapGrid : MonoBehaviour
 
     }
 
+
+
+    public void AddStation(BuildingTemplateSO stationTemplate)
+    {
+        Vector2Int rand = trainTrack[UnityEngine.Random.Range(0, trainTrack.Count)];
+
+
+        while (grid[rand.x, rand.y].GetTag() == null) 
+        {
+            rand = trainTrack[UnityEngine.Random.Range(0, trainTrack.Count)];
+        }
+        
+
+        grid[rand.x, rand.y].builtObject = Instantiate(stationTemplate.mapPrefab, GridCoordToWorldPos(rand.x, rand.y), Quaternion.identity);
+        grid[rand.x, rand.y].builtObject.GetComponent<StationTile>().station = stationPath.AddStation(stationTemplate);
+    }
+
+    void PlaceStartingTile()
+    {
+        Vector2Int coord = trainTrack[0];
+
+        grid[coord.x, coord.y].loopStart = true;
+        grid[coord.x, coord.y].builtObject = Instantiate(startTilePrefab, GridCoordToWorldPos(coord.x, coord.y), Quaternion.identity);
+
+    }
+
+    bool InBounds(int x, int y)
+    {
+        return (x >= 0 && x < width && y >= 0 && y < height);
+    }
+
+    //ARCHIVED STUFF//////////////////////////////////////////////////////////////////////////////////////
+    /*
     void PlaceStartingStations()
     {
         if (RunBuffData.selectedConductor == null)
@@ -318,12 +435,12 @@ public class MapGrid : MonoBehaviour
             {
                 Vector2Int rand = trainTrack[(i + 1) * (trainTrack.Count / startingStations - 2)];
 
-                /*
+                
                 while (grid[rand.x, rand.y].hasStation)
                 {
                     rand = trainTrack[UnityEngine.Random.Range(0, trainTrack.Count)];
                 }
-                */
+                
 
                 BuildingTemplateSO randStation = RunBuffData.selectedConductor.startingBuildings[i];
 
@@ -333,45 +450,20 @@ public class MapGrid : MonoBehaviour
             }
         }
     }
-
-    public void AddStation(BuildingTemplateSO stationTemplate)
+    void SectionedGeneration()
     {
-        Vector2Int rand = trainTrack[UnityEngine.Random.Range(0, trainTrack.Count)];
-
-
-        while (grid[rand.x, rand.y].GetTag() == null) 
+        GenGridTile[,] gen = mapGen.GenTrackErosionMap((width - borderSize * 2) / 3, (height - borderSize * 2) / 3, generationSteps); //generates a grid to be upscaled and offset
+        for (int i = 0; i < gen.GetLength(0); i++)
         {
-            rand = trainTrack[UnityEngine.Random.Range(0, trainTrack.Count)];
+            for (int j = 0; j < gen.GetLength(1); j++)
+            {
+                if (gen[i, j].inside)
+                {
+                    GenTracksOnTile(gen, i, j);
+                }
+            }
         }
-        
-
-        grid[rand.x, rand.y].go = Instantiate(stationTemplate.mapPrefab, GridCoordToWorldPos(rand.x, rand.y), Quaternion.identity);
-        grid[rand.x, rand.y].go.GetComponent<StationTile>().station = stationPath.AddStation(stationTemplate);
     }
-
-    /*
-    public void AddStation(BuildingTemplateSO stationTemplate, Vector2Int Coords)
-    {
-
-    }
-    */
-
-    void PlaceStartingTile()
-    {
-        Vector2Int coord = trainTrack[0];
-
-        grid[coord.x, coord.y].loopStart = true;
-        grid[coord.x, coord.y].go = Instantiate(startTilePrefab, GridCoordToWorldPos(coord.x, coord.y), Quaternion.identity);
-
-    }
-
-    bool InBounds(int x, int y)
-    {
-        return (x >= 0 && x < width && y >= 0 && y < height);
-    }
-
-    //ARCHIVED STUFF//////////////////////////////////////////////////////////////////////////////////////
-    /*
     void RandomWalkGeneration()
     {
         //Vector2Int missingCorner = new Vector2Int(UnityEngine.Random.Range(0, 2), UnityEngine.Random.Range(0, 2));
@@ -621,6 +713,20 @@ public class MapGrid : MonoBehaviour
 
         return current;
         
+    }
+
+    private GameObject MakeLine(Vector3[] vertices)
+    {
+        GameObject o = new GameObject();
+        LineRenderer line = o.AddComponent<LineRenderer>().GetComponent<LineRenderer>();
+        Shader shader = Shader.Find("Hidden/Internal-Colored");
+        Material mat = new Material(shader) { color = new Color(0, 0, 0, 0.5f) };
+        line.material = mat;
+        line.startWidth = 0.5f;
+        line.endWidth = 0.5f;
+        line.positionCount = vertices.Length;
+        line.SetPositions(vertices);
+        return o;
     }
     */
 

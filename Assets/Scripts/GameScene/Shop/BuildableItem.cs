@@ -24,7 +24,7 @@ public class BuildableItem : ShopItem
     {
         base.Update();
         
-        if (OnMap())
+        if (OnMap() && isDragging)
         {
             itemVisual.SetActive(false);
             mapVisual.SetActive(true);

@@ -19,7 +19,7 @@ MonoBehaviour:
   description: Reduces the remaining stops of all passengers by 1
   prefab: {fileID: 5256096576525352009, guid: 223b6f5a2a634b846b7ac885168c5163, type: 3}
   mapPrefab: {fileID: 2105701783349934786, guid: 6f08847050d80fd4387edc6199f03870, type: 3}
-  itemPrefab: {fileID: 2453859669072495849, guid: ed6b3fac31c4b304f88597719eb64bbb, type: 3}
+  itemPrefab: {fileID: 2453859669072495849, guid: 1ea6e99cea12a16479bed8cdf1f3ed87, type: 3}
   occupiedSpaces:
   - {x: 0, y: 0}
   frequency: 1

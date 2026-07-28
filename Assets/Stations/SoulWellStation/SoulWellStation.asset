@@ -20,7 +20,7 @@ MonoBehaviour:
     is departs
   prefab: {fileID: 5256096576525352009, guid: 7496aa994b7a64543a9b81c24d4da92f, type: 3}
   mapPrefab: {fileID: 2105701783349934786, guid: f55eab74031375f42abc515c690f0cbf, type: 3}
-  itemPrefab: {fileID: 2453859669072495849, guid: 138a77ac1d6a09c4482167b81a1c48f1, type: 3}
+  itemPrefab: {fileID: 2453859669072495849, guid: 9867362a305020b4089938977cfb463b, type: 3}
   occupiedSpaces:
   - {x: 0, y: 0}
   frequency: 1
