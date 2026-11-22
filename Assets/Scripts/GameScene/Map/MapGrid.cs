@@ -67,18 +67,25 @@ public class MapGrid : MonoBehaviour
         GeneratePath();
         PlaceStartingTile();
         
+        foreach(Vector2Int track in trainTrack)
+        {
+            Debug.Log(grid[track.x, track.y].GetStation());
+        }
+
     }
 
     public void Build(Vector2Int coords, Rotation rotation, BuildingTemplateSO template)
     {
         GameObject build = Instantiate(template.mapPrefab, GridCoordToWorldPos(coords.x, coords.y), Quaternion.identity);
         build.transform.parent = buildingParent;
+        
 
         for(int i = 0; i < template.occupiedSpaces.Count; i++)
         {
             Vector2Int offset = template.occupiedSpaces[i];
             grid[coords.x + offset.x, coords.y + offset.y].builtObject = build;
             grid[coords.x + offset.x, coords.y + offset.y].empty = false;
+            Debug.Log("Built " + grid[coords.x + offset.x, coords.y + offset.y].builtObject);
         }
 
         if(template.GetTag() == "Station")
@@ -379,7 +386,6 @@ public class MapGrid : MonoBehaviour
         
 
     }
-
 
 
     public void AddStation(BuildingTemplateSO stationTemplate)

@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8963812847834806017}
   - component: {fileID: 4212597072525148639}
+  - component: {fileID: 5279137442743511838}
   m_Layer: 0
   m_Name: FarmlandPrefab
   m_TagString: Building
@@ -49,6 +50,18 @@ MonoBehaviour:
   map: {fileID: 0}
   coords: {x: 0, y: 0}
   projectilePrefab: {fileID: 6099940352824086857, guid: 0496471d19cfc1c4594350603a8d5eb9, type: 3}
+--- !u!210 &5279137442743511838
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2105701783349934786}
+  m_Enabled: 1
+  m_SortingLayerID: -45194987
+  m_SortingLayer: 1
+  m_SortingOrder: 2
+  m_SortAtRoot: 1
 --- !u!1 &3314694442043452064
 GameObject:
   m_ObjectHideFlags: 0

@@ -97,6 +97,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8963812847834806017}
   - component: {fileID: 5241788265775328852}
+  - component: {fileID: 1766583400600052919}
   m_Layer: 0
   m_Name: FireStationMapTile
   m_TagString: Station
@@ -135,6 +136,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   station: {fileID: 0}
   coords: {x: 0, y: 0}
+--- !u!210 &1766583400600052919
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2105701783349934786}
+  m_Enabled: 1
+  m_SortingLayerID: -45194987
+  m_SortingLayer: 1
+  m_SortingOrder: 2
+  m_SortAtRoot: 1
 --- !u!1 &3314694442043452064
 GameObject:
   m_ObjectHideFlags: 0

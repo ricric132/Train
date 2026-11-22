@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8963812847834806017}
+  - component: {fileID: 8370539397059314514}
   m_Layer: 0
   m_Name: BRTrack
   m_TagString: Track
@@ -32,6 +33,18 @@ Transform:
   - {fileID: 2748092943701928578}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!210 &8370539397059314514
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2105701783349934786}
+  m_Enabled: 1
+  m_SortingLayerID: -45194987
+  m_SortingLayer: 1
+  m_SortingOrder: 1
+  m_SortAtRoot: 1
 --- !u!1 &3314694442043452064
 GameObject:
   m_ObjectHideFlags: 0

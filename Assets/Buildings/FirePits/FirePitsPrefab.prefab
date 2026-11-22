@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8963812847834806017}
   - component: {fileID: 1893747457002110272}
+  - component: {fileID: -3885918785002150677}
   m_Layer: 0
   m_Name: FirePitsPrefab
   m_TagString: Building
@@ -45,9 +46,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4581fcde15dcc4942ae38b9b0148e99d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  stationEffectRange: 1
+  map: {fileID: 0}
+  coords: {x: 0, y: 0}
   species:
   - {fileID: 11400000, guid: 80e5fbcf33e5dc7449bd5f992a59254b, type: 2}
   amounts: 03000000
+--- !u!210 &-3885918785002150677
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2105701783349934786}
+  m_Enabled: 1
+  m_SortingLayerID: -45194987
+  m_SortingLayer: 1
+  m_SortingOrder: 2
+  m_SortAtRoot: 1
 --- !u!1 &3314694442043452064
 GameObject:
   m_ObjectHideFlags: 0

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8963812847834806017}
   - component: {fileID: 3158916379088608642}
   - component: {fileID: 4406364816015816527}
+  - component: {fileID: -7188316699208622245}
   m_Layer: 0
   m_Name: GraveyardPrefab
   m_TagString: Building
@@ -70,6 +71,18 @@ MonoBehaviour:
   - {fileID: 11400000, guid: b5000df5ea7eb884680484bdfeb3d97c, type: 2}
   - {fileID: 11400000, guid: 925c9715921901941bed54c62ab5f11f, type: 2}
   amounts: 0200000001000000
+--- !u!210 &-7188316699208622245
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2105701783349934786}
+  m_Enabled: 1
+  m_SortingLayerID: -45194987
+  m_SortingLayer: 1
+  m_SortingOrder: 2
+  m_SortAtRoot: 1
 --- !u!1 &2852312587143362446
 GameObject:
   m_ObjectHideFlags: 0
