@@ -10691,7 +10691,12 @@ MonoBehaviour:
   trainTrack: []
   visualParent: {fileID: 0}
   buildingParent: {fileID: 201445502}
-  terrainParent: {fileID: 0}
+  terrainParent: {fileID: 166628966}
+  terrainPrefabs:
+  - {fileID: 3355295532728669181, guid: 2080ec0a9c4df074391681351211ea0d, type: 3}
+  - {fileID: 3355295532728669181, guid: 2080ec0a9c4df074391681351211ea0d, type: 3}
+  - {fileID: 3355295532728669181, guid: 468845ea52e708746b3d88a7c3b2e563, type: 3}
+  - {fileID: 3355295532728669181, guid: b63afe4addb75384291ab4a83fe5b76f, type: 3}
 --- !u!114 &1010888337
 MonoBehaviour:
   m_ObjectHideFlags: 0

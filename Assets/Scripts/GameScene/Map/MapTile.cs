@@ -9,10 +9,62 @@ public class MapTile
     public bool empty;
     public bool loopStart;
 
-    public GameObject builtObject;
-    public TerrainType terrain;
-    public GameObject terrainObject;
+    private GameObject builtObject;
+    public GameObject BuiltObject
+    {
+        get
+        {
+            return builtObject;
+        }
+        set
+        {
+            if (builtObject)
+            {
+                Object.Destroy(builtObject);
+                Debug.Log("builtObject Overwritten");
+            }
+            builtObject = value;
+        }
+    }
+
+    private TerrainType terrain;
+
+
+    private GameObject terrainObject;
+    public GameObject TerrainObject
+    {
+        get
+        {
+            return terrainObject;
+        }
+        set
+        {
+            if (terrainObject)
+            {
+                Object.Destroy(terrainObject);
+                Debug.Log("terrainObject Overwritten");
+            }
+            terrainObject = value;
+        }
+    }
+
     public GameObject trackTile;
+    public GameObject TrackTile
+    {
+        get
+        {
+            return trackTile;
+        }
+        set
+        {
+            if (trackTile)
+            {
+                Object.Destroy(trackTile);
+                Debug.Log("trackObject Overwritten");
+            }
+            trackTile = value;
+        }
+    }
 
     public MapTile(int _x, int _y)
     {
@@ -22,6 +74,7 @@ public class MapTile
         track = false;
         loopStart = false;
     }
+
 
     public Station GetStation()
     {
