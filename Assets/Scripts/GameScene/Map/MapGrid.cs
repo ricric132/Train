@@ -166,7 +166,7 @@ public class MapGrid : MonoBehaviour
 
     void SetTerrain(Vector2Int coords, TerrainType terrainType)
     {
-
+        GameObject terrainBG;
     }
 
 

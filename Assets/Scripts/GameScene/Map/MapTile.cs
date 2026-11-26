@@ -45,11 +45,4 @@ public class MapTile
     }
 }
 
-public enum TerrainType
-{
-    none, 
-    grass,
-    mountain,
-    water
-}
 
