@@ -7,6 +7,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using static System.Collections.Specialized.BitVector32;
 
 public class GameManager : MonoBehaviour
 {
@@ -225,12 +226,17 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void PrepareStation(Station station)
+    {
+        stationPath.ClearStation(station);
+        stationPath.GenerateStation(station);
+    }
+
     public IEnumerator EnterStation(Station station)
     {
         prevState = state;
         state = GameState.PlayingAnimation;
 
-        stationPath.GenerateStation(station);
 
         //yield return StartCoroutine(trainManager.SimulateEnterStation());
 
@@ -331,7 +337,6 @@ public class GameManager : MonoBehaviour
         state = GameState.PlayingAnimation;
 
         yield return StartCoroutine(trainManager.SimulateLeaveStation());
-        //stationPath.RemovePrevStation();
 
         prevState = state;
         state = GameState.Default;

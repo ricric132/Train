@@ -55,12 +55,12 @@ public class StationPath : MonoBehaviour
         return randomStartingStationPool[UnityEngine.Random.Range(0, options)]; //add other pools later
     }
 
-    public void RemovePrevStation()
+
+    public void ClearStation(Station station)
     {
-        if(curStation != null)
+        if (station != null)
         {
-            curStation.RemovePassengers();
-            curStation.gameObject.SetActive(false);
+            station.RemovePassengers();
         }
 
         upgradeStation.SetActive(false);

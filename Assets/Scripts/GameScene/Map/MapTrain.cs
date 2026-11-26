@@ -4,6 +4,7 @@ using UnityEngine.InputSystem.LowLevel;
 public class MapTrain : MonoBehaviour
 {
     MapGrid map;
+    int prevTile;
     int curTile;
     int nextTile = 1;
     float moveProgress = 0;
@@ -29,8 +30,15 @@ public class MapTrain : MonoBehaviour
 
         if (moveProgress >= 1)
         {
+
+            prevTile = curTile;
             curTile = nextTile;
             nextTile = (nextTile + 1) % map.trainTrack.Count;
+
+            if (map.grid[map.trainTrack[nextTile].x, map.trainTrack[nextTile].y].GetStation())
+            {
+                GameManager.Instance.PrepareStation(map.grid[map.trainTrack[nextTile].x, map.trainTrack[nextTile].y].GetStation());
+            }
             moveProgress = 0;
         }
 
