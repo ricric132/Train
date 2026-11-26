@@ -6,13 +6,14 @@ public class MapTrain : MonoBehaviour
     MapGrid map;
     int curTile;
     int nextTile = 1;
-    float speed = 3;
     float moveProgress = 0;
+    BGScroller bgScroller;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        map = FindFirstObjectByType<MapGrid>();
+        map = GameManager.Instance.mapGrid;
+        bgScroller = GameManager.Instance.bgScroller;
         curTile = 0;
     }
 
@@ -21,23 +22,27 @@ public class MapTrain : MonoBehaviour
     {
 
     }
-    
-    public void Move(float simSpeed)
+
+    public void Move(float moveAmount)
     {
-        Vector2 curPos = map.GridCoordToWorldPos(CurCoords().x, CurCoords().y, centred:true);
-        Vector2 nextPos = map.GridCoordToWorldPos(NextCoords().x, NextCoords().y, centred:true);
-        moveProgress += Time.deltaTime * speed * simSpeed;
-        transform.position = Vector2.Lerp(curPos, nextPos, Mathf.Clamp(moveProgress, 0, 1));
-        if(moveProgress >= 1)
+        moveProgress += Time.deltaTime * moveAmount;
+
+        if (moveProgress >= 1)
         {
             curTile = nextTile;
             nextTile = (nextTile + 1) % map.trainTrack.Count;
             moveProgress = 0;
         }
+
+        Vector2 curPos = map.GridCoordToWorldPos(CurCoords().x, CurCoords().y, centred: true);
+        Vector2 nextPos = map.GridCoordToWorldPos(NextCoords().x, NextCoords().y, centred: true);
+        transform.position = Vector2.Lerp(curPos, nextPos, Mathf.Clamp(moveProgress, 0, 1));
+
+        bgScroller.UpdateBGScroller(curTile, moveProgress);
     }
 
     public Station CheckStation()
-    {
+    {  
         return map.grid[CurCoords().x, CurCoords().y].GetStation();
     }
 

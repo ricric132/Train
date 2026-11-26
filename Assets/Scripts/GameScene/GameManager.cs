@@ -38,6 +38,8 @@ public class GameManager : MonoBehaviour
     public ParticleEffectSpawner fxSpawner;
     public StationGenerator stationGenerator;
 
+    public BGScroller bgScroller;
+
     public MapGrid mapGrid;
 
     int upgradeCurrencyGain;
@@ -105,6 +107,8 @@ public class GameManager : MonoBehaviour
         fxSpawner = FindFirstObjectByType<ParticleEffectSpawner>();
         stationGenerator = FindFirstObjectByType<StationGenerator>(); 
         mapGrid = FindFirstObjectByType<MapGrid>();
+        bgScroller = FindFirstObjectByType<BGScroller>();
+
 
         dayNum = 1;
         dayClock = new ClockTime(6 * 60, 24 * 60);
@@ -133,16 +137,15 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         canvasManager.UpdateQuotaText(baseQuota);
-
     }
 
     // Update is called once per frame
     void Update()
     {
         HandleInputs();
-
         UpdateClock();
     }
+
 
     void HandleInputs()
     {
@@ -229,7 +232,7 @@ public class GameManager : MonoBehaviour
 
         stationPath.GenerateStation(station);
 
-        yield return StartCoroutine(trainManager.SimulateEnterStation());
+        //yield return StartCoroutine(trainManager.SimulateEnterStation());
 
         Station curStation = station;
 
@@ -314,6 +317,8 @@ public class GameManager : MonoBehaviour
         ToggleContractMenu();
         QuotaIncreaseFunction();
 
+        bgScroller.GenerateScreenTiles(mapGrid.trainTrack);
+
         dayNum++;
         clockTimer = 0.0f;
         yield return StartCoroutine(LeaveStation());
@@ -326,10 +331,11 @@ public class GameManager : MonoBehaviour
         state = GameState.PlayingAnimation;
 
         yield return StartCoroutine(trainManager.SimulateLeaveStation());
-        stationPath.RemovePrevStation();
+        //stationPath.RemovePrevStation();
 
         prevState = state;
         state = GameState.Default;
+        yield return null;
     }
 
     void QuotaIncreaseFunction()

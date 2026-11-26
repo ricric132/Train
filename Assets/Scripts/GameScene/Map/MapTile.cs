@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class MapTile : MonoBehaviour
+public class MapTile
 {
     public int x;
     public int y;
@@ -12,6 +12,7 @@ public class MapTile : MonoBehaviour
     public GameObject builtObject;
     public TerrainType terrain;
     public GameObject terrainObject;
+    public GameObject trackTile;
 
     public MapTile(int _x, int _y)
     {

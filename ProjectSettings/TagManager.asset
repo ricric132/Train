@@ -53,6 +53,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Foreground
+    uniqueID: 1509311205
+    locked: 0
   - name: PsudoUI
     uniqueID: 4249772309
     locked: 0

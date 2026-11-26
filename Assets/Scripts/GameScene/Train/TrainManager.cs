@@ -45,7 +45,7 @@ public class TrainManager : MonoBehaviour
 
         if (!stopped)
         {
-            trainIcon.Move(gameManager.trainMoveSimSpeed);
+            trainIcon.Move(gameManager.trainMoveSimSpeed * driveSpeed);
             Station curStation = trainIcon.CheckStation();
             if (curStation != null && curStation != prevStation) 
             {
@@ -68,12 +68,13 @@ public class TrainManager : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
         */
-
+        /*
         while (Mathf.Abs(trainFront.position.x - rightStop.position.x) > 0.1 && trainFront.position.x < rightStop.position.x)
         {
             trainFront.position = new Vector3(driveSpeed * Time.deltaTime * gameManager.animationSimSpeed + trainFront.position.x, trainFront.position.y, trainFront.position.z);
             yield return new WaitForEndOfFrame();
         }
+        */
         stopped = false;
         yield return null;
     }

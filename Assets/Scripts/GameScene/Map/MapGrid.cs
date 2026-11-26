@@ -4,6 +4,7 @@ using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UIElements;
 using UnityEngine.XR;
 
 public class MapGrid : MonoBehaviour
@@ -69,8 +70,21 @@ public class MapGrid : MonoBehaviour
         
         foreach(Vector2Int track in trainTrack)
         {
-            Debug.Log(grid[track.x, track.y].GetStation());
+            //Debug.Log(grid[track.x, track.y].GetStation());
         }
+
+        for (int i = 0; i < grid.GetLength(0); i++)
+        {
+            for (int j = 0; j < grid.GetLength(1); j++)
+            {
+                Debug.Log(grid[i, j].builtObject);
+                
+
+            }
+        }
+
+        GameManager.Instance.bgScroller.GenerateScreenTiles(trainTrack);
+
 
     }
 
@@ -92,6 +106,7 @@ public class MapGrid : MonoBehaviour
         {
             build.GetComponent<StationTile>().station = stationPath.AddStation(template);
             build.GetComponent<StationTile>().coords = coords;
+            Debug.Log("Station built" + " at " + coords.x + " "  + coords.y);
         }
 
 
@@ -238,8 +253,14 @@ public class MapGrid : MonoBehaviour
         Vector2Int exitDir;
         for (int i = 0; i < path.Count; i++)
         {
-            Debug.Log("place track");
+            //Debug.Log("place track");
             Vector2Int cur = path[i];
+
+            if (trainTrack.Contains(cur))
+            {
+                continue;
+            }
+
             trainTrack.Add(cur);
 
             if (i > 0)
@@ -262,34 +283,34 @@ public class MapGrid : MonoBehaviour
 
             if (exitDir.x == 0 && enterDir.x == 0)
             {
-                grid[cur.x, cur.y].builtObject = Instantiate(vTrackTilePrefab, GridCoordToWorldPos(cur.x, cur.y), Quaternion.identity);
-                grid[cur.x, cur.y].builtObject.transform.parent = buildingParent;
+                grid[cur.x, cur.y].trackTile = Instantiate(vTrackTilePrefab, GridCoordToWorldPos(cur.x, cur.y), Quaternion.identity);
+                grid[cur.x, cur.y].trackTile.transform.parent = buildingParent;
             }
             else if (exitDir.y == 0 && enterDir.y == 0)
             {
-                grid[cur.x, cur.y].builtObject = Instantiate(hTrackTilePrefab, GridCoordToWorldPos(cur.x, cur.y), Quaternion.identity);
-                grid[cur.x, cur.y].builtObject.transform.parent = buildingParent;
+                grid[cur.x, cur.y].trackTile = Instantiate(hTrackTilePrefab, GridCoordToWorldPos(cur.x, cur.y), Quaternion.identity);
+                grid[cur.x, cur.y].trackTile.transform.parent = buildingParent;
             }
             else if (enterDir + exitDir == new Vector2Int(1, -1))
             { 
-                grid[cur.x, cur.y].builtObject = Instantiate(tlTrackTilePrefab, GridCoordToWorldPos(cur.x, cur.y), Quaternion.identity);
-                grid[cur.x, cur.y].builtObject.transform.parent = buildingParent;
+                grid[cur.x, cur.y].trackTile = Instantiate(tlTrackTilePrefab, GridCoordToWorldPos(cur.x, cur.y), Quaternion.identity);
+                grid[cur.x, cur.y].trackTile.transform.parent = buildingParent;
             }
             else if (enterDir + exitDir == new Vector2Int(-1, -1))
             {
-                grid[cur.x, cur.y].builtObject = Instantiate(trTrackTilePrefab, GridCoordToWorldPos(cur.x, cur.y), Quaternion.identity);
-                grid[cur.x, cur.y].builtObject.transform.parent = buildingParent;
+                grid[cur.x, cur.y].trackTile = Instantiate(trTrackTilePrefab, GridCoordToWorldPos(cur.x, cur.y), Quaternion.identity);
+                grid[cur.x, cur.y].trackTile.transform.parent = buildingParent;
 
             }
             else if (enterDir + exitDir == new Vector2Int(-1, 1))
             {
-                grid[cur.x, cur.y].builtObject = Instantiate(brTrackTilePrefab, GridCoordToWorldPos(cur.x, cur.y), Quaternion.identity);
-                grid[cur.x, cur.y].builtObject.transform.parent = buildingParent;
+                grid[cur.x, cur.y].trackTile = Instantiate(brTrackTilePrefab, GridCoordToWorldPos(cur.x, cur.y), Quaternion.identity);
+                grid[cur.x, cur.y].trackTile.transform.parent = buildingParent;
             }
             else
             {
-                grid[cur.x, cur.y].builtObject = Instantiate(blTrackTilePrefab, GridCoordToWorldPos(cur.x, cur.y), Quaternion.identity);
-                grid[cur.x, cur.y].builtObject.transform.parent = buildingParent;
+                grid[cur.x, cur.y].trackTile = Instantiate(blTrackTilePrefab, GridCoordToWorldPos(cur.x, cur.y), Quaternion.identity);
+                grid[cur.x, cur.y].trackTile.transform.parent = buildingParent;
             }
         }
     }
@@ -345,31 +366,31 @@ public class MapGrid : MonoBehaviour
 
                         if (exitDir.x == 0 && enterDir.x == 0)
                         {
-                            grid[cur.x, cur.y].builtObject = Instantiate(vTrackTilePrefab, GridCoordToWorldPos(cur.x, cur.y), Quaternion.identity);
+                            grid[cur.x, cur.y].trackTile = Instantiate(vTrackTilePrefab, GridCoordToWorldPos(cur.x, cur.y), Quaternion.identity);
                         }
                         else if (exitDir.y == 0 && enterDir.y == 0)
                         {
-                            grid[cur.x, cur.y].builtObject = Instantiate(hTrackTilePrefab, GridCoordToWorldPos(cur.x, cur.y), Quaternion.identity);
+                            grid[cur.x, cur.y].trackTile = Instantiate(hTrackTilePrefab, GridCoordToWorldPos(cur.x, cur.y), Quaternion.identity);
                         }
                         else if (enterDir + exitDir == new Vector2Int(1, -1))
                         {
 
-                            grid[cur.x, cur.y].builtObject = Instantiate(tlTrackTilePrefab, GridCoordToWorldPos(cur.x, cur.y), Quaternion.identity);
+                            grid[cur.x, cur.y].trackTile = Instantiate(tlTrackTilePrefab, GridCoordToWorldPos(cur.x, cur.y), Quaternion.identity);
                             
                         }
                         else if (enterDir + exitDir == new Vector2Int(-1, -1))
                         {
-                            grid[cur.x, cur.y].builtObject = Instantiate(trTrackTilePrefab, GridCoordToWorldPos(cur.x, cur.y), Quaternion.identity);
+                            grid[cur.x, cur.y].trackTile = Instantiate(trTrackTilePrefab, GridCoordToWorldPos(cur.x, cur.y), Quaternion.identity);
 
                         }
                         else if (enterDir + exitDir == new Vector2Int(-1, 1))
                         {
-                            grid[cur.x, cur.y].builtObject = Instantiate(brTrackTilePrefab, GridCoordToWorldPos(cur.x, cur.y), Quaternion.identity);
+                            grid[cur.x, cur.y].trackTile = Instantiate(brTrackTilePrefab, GridCoordToWorldPos(cur.x, cur.y), Quaternion.identity);
 
                         }
                         else
                         {
-                            grid[cur.x, cur.y].builtObject = Instantiate(blTrackTilePrefab, GridCoordToWorldPos(cur.x, cur.y), Quaternion.identity);  
+                            grid[cur.x, cur.y].trackTile = Instantiate(blTrackTilePrefab, GridCoordToWorldPos(cur.x, cur.y), Quaternion.identity);  
                         }
                     }
                 }

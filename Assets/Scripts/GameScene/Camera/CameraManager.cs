@@ -61,17 +61,16 @@ public class CameraManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
         if (Input.GetKeyDown(KeyCode.M))
         {
-            OpenMapCam();
+            //OpenMapCam();
         }
 
         switch (camState)
         {
             case CamState.train:
-                baseCam.transform.position = baseCamCentre.position + new Vector3(0, 0, -10);
-                //UpdateTrainCam();
+                //baseCam.transform.position = baseCamCentre.position + new Vector3(0, 0, -10);
+                UpdateTrainCam();
                 break;
 
             case CamState.seatPan:
