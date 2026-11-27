@@ -55,6 +55,16 @@ public class TriggerEffectHandler : MonoBehaviour
                 boneGenEffects.Add(boneGenEffect);
             }
 
+            if (monoBehaviour is IOnWarmGenEffect warmGenEffect)
+            {
+                warmGenEffects.Add(warmGenEffect);
+            }
+
+            if (monoBehaviour is IOnChillGenEffect chillGenEffect)
+            {
+                chillGenEffects.Add(chillGenEffect);
+            }
+
             if (monoBehaviour is IOnMoneyEarntEffect onMoneyEarnt)
             {
                 onMoneyEarntEffects.Add(onMoneyEarnt);
@@ -143,7 +153,7 @@ public class TriggerEffectHandler : MonoBehaviour
 
     public IEnumerator TriggerWarmGen(TrainCar car, int warmAmt)
     {
-        for (int i = 0; i < boneGenEffects.Count; i++)
+        for (int i = 0; i < warmGenEffects.Count; i++)
         {
             StartCoroutine(warmGenEffects[i].OnWarmGen(car, warmAmt));
         }
@@ -153,7 +163,7 @@ public class TriggerEffectHandler : MonoBehaviour
 
     public IEnumerator TriggerChillGen(TrainCar car, int chillAmt)
     {
-        for (int i = 0; i < boneGenEffects.Count; i++)
+        for (int i = 0; i < chillGenEffects.Count; i++)
         {
             StartCoroutine(chillGenEffects[i].OnChillGen(car, chillAmt));
         }
