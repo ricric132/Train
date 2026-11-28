@@ -243,6 +243,10 @@ public class TrainManager : MonoBehaviour
     {
         List<Passenger> allPassengers = GetAllOtherPassengers(p);
 
+        if(allPassengers.Count == 0)
+        {
+            return null;
+        }
         return allPassengers[UnityEngine.Random.Range(0, allPassengers.Count)];
     }
 

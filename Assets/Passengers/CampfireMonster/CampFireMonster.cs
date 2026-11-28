@@ -4,14 +4,15 @@ using System.Collections.Generic;
 
 public class CampFireMonster : Passenger, IOnWarmGenEffect
 {
-    [SerializeField] Sprite unlitSprite;
-    [SerializeField] Sprite litSprite;
+    [SerializeField] GameObject unlitSprite;
+    [SerializeField] GameObject litSprite;
 
     bool lit = false;
 
     public override void Start()
     {
-        visual.GetComponent<SpriteRenderer>().sprite = unlitSprite;
+        unlitSprite.SetActive(true);
+        litSprite.SetActive(false);
         if (startRan)
         {
             return;
@@ -51,7 +52,8 @@ public class CampFireMonster : Passenger, IOnWarmGenEffect
             lit = true;
             trainManager.GetTrainCar(this.seat).UpdateWarmAmt(warmAmt);
         }
-        visual.GetComponent<SpriteRenderer>().sprite = litSprite;
+        unlitSprite.SetActive(false);
+        litSprite.SetActive(true);
         yield return null;
     }
 

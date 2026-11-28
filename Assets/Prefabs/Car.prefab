@@ -62,7 +62,7 @@ MonoBehaviour:
   m_NormalMapQuality: 2
   m_UseNormalMap: 0
   m_ShadowsEnabled: 1
-  m_ShadowIntensity: 0.75
+  m_ShadowIntensity: 0.533
   m_ShadowSoftness: 0.3
   m_ShadowSoftnessFalloffIntensity: 0.5
   m_ShadowVolumeIntensityEnabled: 0
@@ -72,7 +72,7 @@ MonoBehaviour:
     m_Extent: {x: 0.9985302, y: 0.99853027, z: 0}
   m_PointLightInnerAngle: 157.29236
   m_PointLightOuterAngle: 179.44612
-  m_PointLightInnerRadius: 3.3
+  m_PointLightInnerRadius: 0
   m_PointLightOuterRadius: 3.77
   m_ShapeLightParametricSides: 5
   m_ShapeLightParametricAngleOffset: 0
@@ -94,6 +94,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3921731694914640887}
   - component: {fileID: 4814353701658562220}
+  - component: {fileID: 295217152934279785}
   m_Layer: 0
   m_Name: Car
   m_TagString: Untagged
@@ -136,6 +137,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   carBuffIndicator: {fileID: 3172465694538663474}
+--- !u!210 &295217152934279785
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2131206136694444424}
+  m_Enabled: 1
+  m_SortingLayerID: -2113470513
+  m_SortingLayer: -1
+  m_SortingOrder: 0
+  m_SortAtRoot: 0
 --- !u!1 &5065278045146931301
 GameObject:
   m_ObjectHideFlags: 0
@@ -167,6 +180,7 @@ Transform:
   m_Children:
   - {fileID: 2167739001061170850}
   - {fileID: 4409871538899143448}
+  - {fileID: 4357646138725055583}
   m_Father: {fileID: 2840839646062059185}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5115698849065623053
@@ -228,13 +242,13 @@ MonoBehaviour:
   - {x: -3.4833832, y: 0.9928481, z: 0}
   - {x: -3.4678187, y: -1.6062088, z: 0}
   - {x: 3.2648258, y: -1.5803347, z: 0}
-  - {x: 3.2590485, y: 0.95905864, z: 0}
-  - {x: -3.5572977, y: 0.9556532, z: 0}
-  - {x: -3.556545, y: 0.99290085, z: 0}
+  - {x: 3.2590485, y: 0.9511299, z: 0}
+  - {x: -3.563624, y: 0.9366007, z: 0}
+  - {x: -3.5673378, y: 0.99646187, z: 0}
   - {x: 3.3509102, y: 0.99950373, z: 0}
   - {x: 3.341896, y: -1.7034643, z: 0}
   - {x: -3.432598, y: -1.7044095, z: 0}
-  m_ShapePathHash: 1381269844
+  m_ShapePathHash: 2079330538
   m_InstanceId: 0
   m_ShadowShape2DComponent: {fileID: 0}
   m_ShadowShape2DProvider:
@@ -447,7 +461,7 @@ MonoBehaviour:
   m_CastingOption: 1
   m_PreviousTrimEdge: 0
   m_PreviousEdgeProcessing: 1
-  m_PreviousShadowCastingSource: 1
+  m_PreviousShadowCastingSource: 0
   m_PreviousShadowShape2DSource: {fileID: 0}
   references:
     version: 2
@@ -464,6 +478,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2840839646062059185}
   - component: {fileID: 1146971486777633764}
+  - component: {fileID: 875617898814622209}
   m_Layer: 0
   m_Name: Visual
   m_TagString: Untagged
@@ -531,7 +546,7 @@ SpriteRenderer:
   m_SortingLayerID: -2113470513
   m_SortingLayer: -1
   m_SortingOrder: 2
-  m_Sprite: {fileID: 21300000, guid: 0875e51b5d11553499a5b322e0681bee, type: 3}
+  m_Sprite: {fileID: 3536053945297908068, guid: cf79ef5aafe5d6d45a1df54f73630a04, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -542,6 +557,104 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &875617898814622209
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6377951535610341074}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38f48a8d66b2adc46887f23a3a88ac01, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ShadowGroup: 0
+  m_Priority: 0
+--- !u!1 &8386178639903564137
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4357646138725055583}
+  - component: {fileID: 3611673346412163590}
+  m_Layer: 0
+  m_Name: Wall (2)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &4357646138725055583
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8386178639903564137}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5819015886814847785}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3611673346412163590
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8386178639903564137}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db70e0ea77f5ac47a8f4565a9406397, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ShadowGroup: 0
+  m_Priority: 0
+  m_ComponentVersion: 5
+  m_HasRenderer: 0
+  m_UseRendererSilhouette: 1
+  m_CastsShadows: 1
+  m_SelfShadows: 0
+  m_AlphaCutoff: 0.1
+  m_ApplyToSortingLayers: cfff068200000000
+  m_ShapePath:
+  - {x: -3.5968542, y: 1.019824, z: 0}
+  - {x: -3.5928822, y: -1.7029018, z: 0}
+  - {x: 3.3357916, y: -1.667759, z: 0}
+  - {x: 3.3408003, y: 0.9787893, z: 0}
+  m_ShapePathHash: 2029153505
+  m_InstanceId: 0
+  m_ShadowShape2DComponent: {fileID: 0}
+  m_ShadowShape2DProvider:
+    rid: -2
+  m_ShadowCastingSource: 1
+  m_ShadowMesh:
+    m_Mesh: {fileID: 0}
+    m_LocalBounds:
+      m_Center: {x: -0.12802696, y: -0.3415389, z: 0}
+      m_Extent: {x: 3.4688272, y: 1.3613629, z: 0}
+    m_EdgeProcessing: 1
+    m_TrimEdge: 0
+    m_FlipX: 0
+    m_FlipY: 0
+    m_InitialTrim: 0
+  m_CastingOption: 1
+  m_PreviousTrimEdge: 0
+  m_PreviousEdgeProcessing: 1
+  m_PreviousShadowCastingSource: 1
+  m_PreviousShadowShape2DSource: {fileID: 0}
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
 --- !u!1001 &790014412792802773
 PrefabInstance:
   m_ObjectHideFlags: 0

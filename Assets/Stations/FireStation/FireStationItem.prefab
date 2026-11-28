@@ -76,7 +76,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: d892d3402306dab4a8789d3ba7e269f1, type: 3}
+  m_Sprite: {fileID: 4903019175749753009, guid: 4644778b137e79640b32980ddbce362e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -145,6 +145,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24c68fb9dbb46764e9a136785b782576, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isDragging: 0
   map: {fileID: 0}
   occupied: []
   cam: {fileID: 0}
@@ -180,7 +181,7 @@ SortingGroup:
   m_GameObject: {fileID: 2453859669072495849}
   m_Enabled: 1
   m_SortingLayerID: -45194987
-  m_SortingLayer: 1
+  m_SortingLayer: 2
   m_SortingOrder: 1
   m_SortAtRoot: 0
 --- !u!61 &2829040362883817843
@@ -305,7 +306,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: d892d3402306dab4a8789d3ba7e269f1, type: 3}
+  m_Sprite: {fileID: 4903019175749753009, guid: 4644778b137e79640b32980ddbce362e, type: 3}
   m_Color: {r: 1, g: 0, b: 0.027018547, a: 0.7019608}
   m_FlipX: 0
   m_FlipY: 0
@@ -392,7 +393,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: d892d3402306dab4a8789d3ba7e269f1, type: 3}
+  m_Sprite: {fileID: 4903019175749753009, guid: 4644778b137e79640b32980ddbce362e, type: 3}
   m_Color: {r: 0.15390277, g: 1, b: 0, a: 0.7372549}
   m_FlipX: 0
   m_FlipY: 0

@@ -283,7 +283,7 @@ public class GameManager : MonoBehaviour
         LoopComplete();
 
         stationPath.GenerateUpgradeStation();
-        yield return StartCoroutine(trainManager.SimulateEnterStation());
+        //yield return StartCoroutine(trainManager.SimulateEnterStation());
 
         trainManager.DecrimentContractDays();
         canvasManager.OpenEndOfDayOverviewPopup();
@@ -293,6 +293,8 @@ public class GameManager : MonoBehaviour
 
         prevState = state;
         state = GameState.Default;
+
+        yield return null;
 
     }
 

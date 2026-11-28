@@ -19,6 +19,6 @@ public class GameLauncher : MonoBehaviour
     public void LaunchGame()
     {
         RunBuffData.selectedConductor = conductorSelector.GetActiveConductor();
-        SceneManager.LoadScene("GameScene");
+        SceneManager.LoadScene("GameSceneTest");
     }
 }
